@@ -1,0 +1,73 @@
+<aura:component description="MPMovieSelected" controller="MPSiteController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="movie" type="Object"/>
+    <aura:attribute name="actors" type="Object[]"/>
+    <aura:attribute name="images" type="Object[]"/>
+    <aura:attribute name="displayedSection" type="Boolean" default="false"/>
+
+    <aura:handler event="c:MPSelectedMovieEvent" action="{!c.MPSelectedMovieEvent}"/>
+    <aura:handler event="c:MPHideMovieDetailEvent" action="{!c.MPHideMovieDetailEvent}"/>
+    <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
+    <aura:registerEvent name="MPShowSearchComponentEvent" type="c:MPShowSearchComponentEvent"/>
+
+    <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
+    <lightning:card title="">
+        <lightning:layout verticalAlign="end">
+            <div style="width : 49%; float :left; margin-left : 20px; margin-bottom : 50px">
+                <lightning:button class="slds-button" variant="brand" label="Back to Search Page" onclick="{!c.goBack}"/>
+                <lightning:button class="slds-button" variant="brand" label="Go Back" onclick="{!c.goBack}"/>
+            </div>
+        </lightning:layout>
+        <lightning:layout multipleRows="false">
+            <div style="margin-bottom : 50px">
+            <lightning:layoutItem>
+                <div style="float :left; margin-left : 20px; width: 49%">
+                    <img src="{!empty(v.movie.poster_path) ? $Resource.MP_Default :'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + v.movie.poster_path}"/>
+                </div>
+                <div style="float :right; padding-left: 20px; width:49%; padding-right: 20px">
+                    {!v.movie.title} <br/>
+                    Budget: {!v.movie.budget}<br/>
+                    Homepage: <a href="{!v.movie.homepage}">{!v.movie.homepage}</a><br/>
+                    Release Date : {!v.movie.release_date}<br/>
+                    {!v.movie.budget}<br/>
+                    {!v.movie.budget}<br/>
+                    Overview: {!v.movie.overview}<br/>
+                </div>
+            </lightning:layoutItem>
+            </div>
+        </lightning:layout>
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem>
+                    <lightning:tabset selectedTabId="one">
+                        <lightning:tab label="Cast" id="one">
+                            <lightning:layout multipleRows="true" horizontalAlign="center">
+                                <aura:iteration items="{!v.actors}" var="actor">
+                                    <div style="margin-bottom: 20px;">
+                                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                                            <c:MPActorListItem actor="{!actor}"/>
+                                        </lightning:layoutItem>
+                                    </div>
+                                </aura:iteration>
+                            </lightning:layout>
+                        </lightning:tab>
+                        <lightning:tab label="Images" id="two" onactive="{!c.getImages}">
+                            <lightning:layout multipleRows="true" horizontalAlign="center">
+                                <aura:iteration items="{!v.images}" var="image">
+                                    <div style="margin-bottom: 20px;">
+                                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                                            <img src="{!'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + image.file_path}"/>
+                                        </lightning:layoutItem>
+                                    </div>
+                                </aura:iteration>
+                            </lightning:layout>
+                        </lightning:tab>
+                        <lightning:tab label="Videos" id="three">
+                            Videos
+                        </lightning:tab>
+                    </lightning:tabset>
+                </lightning:layoutItem>
+            </lightning:layout>
+    </lightning:card>
+    </div>
+</aura:component>

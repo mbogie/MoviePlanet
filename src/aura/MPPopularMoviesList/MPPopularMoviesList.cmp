@@ -1,0 +1,57 @@
+<aura:component description="MPPopularMoviesList" controller="MPSiteController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="popularMovies" type="Object[]"/>
+    <aura:attribute name="searchedMovies" type="Object[]"/>
+    <aura:attribute name="searchedActors" type="Object[]"/>
+    <aura:attribute name="context" type="String" default="popular"/>
+    <aura:attribute name="displayedSection" type="Boolean" default="true" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:handler event="c:MPPassMoviesEvent" action="{!c.MPPassMoviesEvent}"/>
+    <aura:handler event="c:MPPassActorsEvent" action="{!c.MPPassActorsEvent}"/>
+    <aura:handler event="c:MPHomePageEvent" action="{!c.MPHomePageEvent}"/>
+    <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
+    <aura:handler event="c:MPShowSearchComponentEvent" action="{!c.MPShowSearchComponentEvent}"/>
+
+    <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
+    <lightning:card title="" class="card">
+        <aura:if isTrue="{!v.context  == 'popular' }">
+        <lightning:layout multipleRows="false" horizontalAlign="center">
+            <div align="center" style="margin-bottom : 30px">
+                <h1>Welcome on page. Popular Movies</h1>
+            </div>
+        </lightning:layout>
+        </aura:if>
+        <lightning:layout multipleRows="true" horizontalAlign="center">
+            <aura:if isTrue="{!v.context  == 'popular' }">
+                <aura:iteration items="{!v.popularMovies}" var="popular">
+                    <div style="margin-bottom: 20px">
+                    <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                        <c:MPMovieListItem movie="{!popular}"/>
+                    </lightning:layoutItem>
+                    </div>
+                </aura:iteration>
+            </aura:if>
+            <aura:if isTrue="{!v.context  == 'movie' }">
+                <aura:iteration items="{!v.searchedMovies}" var="movie">
+                    <div style="margin-bottom: 20px">
+                    <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                        <c:MPMovieListItem movie="{!movie}"/>
+                    </lightning:layoutItem>
+                    </div>
+                </aura:iteration>
+            </aura:if>
+            <aura:if isTrue="{!v.context  == 'actor' }">
+                <aura:iteration items="{!v.searchedActors}" var="actor">
+                    <div style="margin-bottom: 20px">
+                    <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                        <c:MPActorListItem actor="{!actor}"/>
+                    </lightning:layoutItem>
+                    </div>
+                </aura:iteration>
+            </aura:if>
+        </lightning:layout>
+    </lightning:card>
+    </div>
+</aura:component>

@@ -1,0 +1,42 @@
+<aura:component description="MPSearchForm" controller="MPSiteController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="query" type="String" default=""/>
+    <aura:attribute name="sType" type="String[]" default="Actor,Movie"/>
+    <aura:attribute name="selectedType" type="String" default="Actor"/>
+    <aura:attribute name="displayedSection" type="Boolean" default="true" />
+
+    <aura:registerEvent name="passMovies" type="c:MPPassMoviesEvent"/>
+    <aura:registerEvent name="passActors" type="c:MPPassActorsEvent"/>
+    <aura:registerEvent name="goHome" type="c:MPHomePageEvent"/>
+    <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
+    <aura:handler event="c:MPShowSearchComponentEvent" action="{!c.MPShowSearchComponentEvent}"/>
+
+    <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
+    <lightning:card title="" class="card">
+        <lightning:layout verticalAlign="end">
+            <div style="width : 49%; float :left; margin-left : 20px">
+                <lightning:button class="slds-button" variant="brand" label="Home" onclick="{!c.goHome}"/>
+            </div>
+            <div style="width : 49%; float :right; text-align : right; margin-right : 10px">
+                <lightning:button class="slds-button" variant="brand" label="Favourite" onclick="{!c.favourite}"/>
+                <lightning:button class="slds-button" variant="brand" label="Black List" onclick="{!c.blacklist}"/>
+            </div>
+        </lightning:layout>
+        <lightning:layout horizontalAlign="center" verticalAlign="end">
+        <lightning:layoutItem padding="horizontal-medium" class="slds-grid_vertical-align-center">
+                <lightning:input name="query" label="" value="{!v.query}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="horizontal-medium" class="slds-grid_vertical-align-center">
+                <lightning:select aura:id="searchTypes" name="selectType" label="">
+                    <aura:iteration items="{!v.sType}" var="sType">
+                        <option text="{!sType}" value="{!sType}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="slds-grid_vertical-align-center" padding="horizontal-medium">
+                <lightning:button class="slds-button" variant="brand" label="Search" onclick="{!c.onFormSubmit}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+    </div>
+</aura:component>

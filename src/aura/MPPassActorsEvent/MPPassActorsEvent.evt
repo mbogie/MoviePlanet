@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="MPPassActorsEvent">
+    <aura:attribute name="actorList" type="Object[]"/>
+    <aura:attribute name="context" type="String"/>
+</aura:event>

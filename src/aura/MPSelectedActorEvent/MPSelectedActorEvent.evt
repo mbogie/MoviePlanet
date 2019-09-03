@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="MPSelectedActorEvent">
+    <aura:attribute name="actorId" type="String"/>
+    <aura:attribute name="display" type="Boolean"/>
+</aura:event>

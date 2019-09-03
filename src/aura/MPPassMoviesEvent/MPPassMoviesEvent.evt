@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="MPPassMoviesEvent">
+    <aura:attribute name="movieList" type="Object[]"/>
+    <aura:attribute name="context" type="String"/>
+</aura:event>

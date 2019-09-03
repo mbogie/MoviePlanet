@@ -1,0 +1,18 @@
+<aura:component description="MPActorListItem" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="actor" type="Object"/>
+<!--    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>-->
+    <aura:registerEvent name="actorSelect" type="c:MPSelectedActorEvent"/>
+    <aura:registerEvent name="hideMovie" type="c:MPHideMovieDetailEvent"/>
+    <aura:registerEvent name="hideSearchComponent" type="c:MPHideSearchComponentEvent"/>
+    <aura:registerEvent name="showActorDetailComponent" type="c:MPShowActorDetailComponent"/>
+
+    <lightning:button class="image" onclick="{!c.onSelect}">
+        <div style="{!empty(v.actor.profile_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.actor.profile_path + ')'}" class="innertile">
+            <div class="lower-third">
+                <h1 class="slds-truncate">{!v.actor.name}</h1>
+            </div>
+        </div>
+    </lightning:button>
+
+</aura:component>
