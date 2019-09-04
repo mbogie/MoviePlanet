@@ -1,33 +1,34 @@
 ({
-    doInit : function(component, event, helper) {
-            let movie = component.get("v.movie");
-      	},
+    doInit: function (component, event, helper) {
+        let fbType = component.get("v.movie").FBtype;
+        console.log(FBType == 'Black List');
+        component.set("v.FBType", FBType);
+    },
 
-    onSelect : function(component, event, helper) {
+    onSelect: function (component, event, helper) {
         let hideMovie = $A.get("e.c:MPHideActorDetailEvent");
-                      hideMovie.setParams({
-                              "display" : false
-                              });
-                              hideMovie.fire();
+        hideMovie.setParams({
+            "display": false
+        });
+        hideMovie.fire();
         let movieId = component.get("v.movie").id;
         let action = $A.get("e.c:MPSelectedMovieEvent");
-                      action.setParams({
-                          "movieId" : movieId,
-                          "display" : true
-                          });
-                      action.fire();
-            let showReviews = $A.get("e.c:MPShowReviews");
-                                 showReviews.setParams({
-                                 "id" : movieId,
-                                 "display" : true,
-                                 "context" : "Movie"
-                                 });
-                                 showReviews.fire();
-            let hide = $A.get("e.c:MPHideSearchComponentEvent");
-                      hide.setParams({
-                      "display" : false
-                      });
-                      hide.fire();
-
+        action.setParams({
+            "movieId": movieId,
+            "display": true
+        });
+        action.fire();
+        let showReviews = $A.get("e.c:MPShowReviews");
+        showReviews.setParams({
+            "id": movieId,
+            "display": true,
+            "context": "Movie"
+        });
+        showReviews.fire();
+        let hide = $A.get("e.c:MPHideSearchComponentEvent");
+        hide.setParams({
+            "display": false
+        });
+        hide.fire();
     },
- })
+})

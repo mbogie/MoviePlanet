@@ -20,6 +20,7 @@ public class MPMovieSearchWrapper {
 //        public String overview;
         @AuraEnabled public String poster_path;
         @AuraEnabled public String source;
+        @AuraEnabled public String FBType;
 
         public Movies(Movie__c movie){
             id = movie.Id;

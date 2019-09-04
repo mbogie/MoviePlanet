@@ -2,9 +2,10 @@ public class MPPopularMoviesWrapper {
 
     public class PopularMovies {
         @AuraEnabled public String poster_path;
-        @AuraEnabled public Integer id;
+        @AuraEnabled public String id;
         @AuraEnabled public String title;
         @AuraEnabled public String source;
+        @AuraEnabled public String FBType;
 
     }
 

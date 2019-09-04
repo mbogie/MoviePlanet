@@ -177,9 +177,9 @@
             <valueSetDefinition>
                 <sorted>false</sorted>
                 <value>
-                    <fullName>Favorit</fullName>
+                    <fullName>Favorite</fullName>
                     <default>false</default>
-                    <label>Favorit</label>
+                    <label>Favorite</label>
                 </value>
                 <value>
                     <fullName>Black List</fullName>
@@ -206,6 +206,15 @@
         <fullName>All</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>all_all</fullName>
+        <columns>NAME</columns>
+        <columns>MovieId__c</columns>
+        <columns>User__c</columns>
+        <columns>Type__c</columns>
+        <filterScope>Mine</filterScope>
+        <label>all all</label>
     </listViews>
     <nameField>
         <displayFormat>F-{00000}</displayFormat>

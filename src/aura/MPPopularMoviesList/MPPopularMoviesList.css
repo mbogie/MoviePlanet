@@ -1,32 +1,32 @@
 .THIS .card {
-    background-color : #322A29;
-    color : white;
+    background-color: #322A29;
+    color: white;
 }
 
 .THIS .pagin {
-    margin-bottom : 30px;
+    margin-bottom: 30px;
 }
 
 .THIS .header {
-    font-size : 30px;
-    margin-bottom : 30px;
+    font-size: 30px;
+    margin-bottom: 30px;
 }
 
 .THIS .popular {
-    font-size : 15px;
-    margin-left : 30px;
-    margin-bottom : 10px;
+    font-size: 15px;
+    margin-left: 30px;
+    margin-bottom: 10px;
 }
 
 .THIS .button svg {
-    fill : #896F42;
+    fill: #896F42;
 }
 
 .THIS .bf {
-    border-top : 2px solid #896F42;
-    margin-right : 25px;
-    margin-left : 25px;
-    padding-left : 20px;
-    font-size : 20px;
-    margin-top : 30px;
+    border-top: 2px solid #896F42;
+    margin-right: 25px;
+    margin-left: 25px;
+    padding-left: 20px;
+    font-size: 20px;
+    margin-top: 30px;
 }

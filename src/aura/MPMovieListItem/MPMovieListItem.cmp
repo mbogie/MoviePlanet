@@ -8,14 +8,14 @@
     <aura:registerEvent name="hideSearchComponent" type="c:MPHideSearchComponentEvent"/>
 
     <aura:if isTrue="{!equals(v.movie.source, 'internal')}">
-    <lightning:button class="image" onclick="{!c.onSelect}">
+        <lightning:button class="image" onclick="{!c.onSelect}">
             <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(' + v.movie.poster_path + ')'}"
                  class="innertile">
                 <div class="lower-third">
                     <h1 class="slds-truncate">{!v.movie.title}</h1>
                 </div>
             </div>
-    </lightning:button>
+        </lightning:button>
     </aura:if>
     <aura:if isTrue="{!equals(v.movie.source, 'external')}">
         <lightning:button class="image" onclick="{!c.onSelect}">

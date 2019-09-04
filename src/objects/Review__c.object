@@ -212,6 +212,11 @@
         </valueSet>
     </fields>
     <label>Review</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <label>Title</label>
         <trackHistory>false</trackHistory>

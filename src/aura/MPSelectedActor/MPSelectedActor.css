@@ -1,6 +1,64 @@
+.THIS .genre {
+    margin: 3px;
+    border: 1px solid #896F42;
+    max-width: 150px;
+    padding-right: 5px;
+    padding-left: 5px;
+    float: left;
+    border-radius: 12px;
+    text-align: center;
+}
+
 .THIS .title {
-    margin-left : 20px;
-    margin-bottom : 20px;
-    font-size : 30px;
-    float : left;
- }
+    margin-left: 18px;
+    margin-bottom: 20px;
+    font-size: 30px;
+    float: left;
+    border-top: 2px solid #896F42;
+    border-left: 2px solid #896F42;
+    padding-left: 5px;
+    width: 95%;
+}
+
+.THIS .card {
+    background-color: #322A29;
+    color: white;
+}
+
+.THIS .customButton {
+    font-size: 15px;
+    background-color: #896F42;
+    width: 200px;
+    border: 2px solid #896F42;
+    text-align: center;
+    color: white;
+    border-radius: 100px;
+    margin-left: 25px;
+    margin-bottom: 30px;
+}
+
+.THIS .rightPanel {
+    margin-right: 25px;
+    border-right: 2px solid #896F42;
+    border-bottom: 2px solid #896F42;
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+
+.THIS .poster {
+    padding-left: 25px;
+    width: 40%;
+}
+
+.THIS .details {
+    padding-right: 25px;
+    padding-left: 25px;
+    width: 60%;
+}
+
+.THIS .tabs{
+    color: white;
+    background-color: #322A29;
+    padding-right: 25px;
+    padding-left: 25px;
+}

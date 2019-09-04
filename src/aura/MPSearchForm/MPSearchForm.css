@@ -1,39 +1,39 @@
 .THIS .card {
-    background-color : #322A29;
+    background-color: #322A29;
 }
 
 .THIS .homeButton {
-    margin-left : 25px;
-    float : left;
+    margin-left: 25px;
+    float: left;
 }
 
 .THIS .rightButtons {
-    margin-right : 25px;
-        font-size : 15px;
-        background-color : #896F42;
-        width : 200px;
-        border : 2px solid #896F42;
-        text-align : center;
-        color : white;
-        border-radius: 100px;
-}
-
-.THIS .customButton {
-    font-size : 15px;
-    background-color : #896F42;
-    width : 100px;
-    border : 2px solid #896F42;
-    text-align : center;
-    color : white;
+    margin-right: 25px;
+    font-size: 15px;
+    background-color: #896F42;
+    width: 200px;
+    border: 2px solid #896F42;
+    text-align: center;
+    color: white;
     border-radius: 100px;
 }
 
-.THIS .input{
-    width : 400px;
-    margin-right : 20px;
+.THIS .customButton {
+    font-size: 15px;
+    background-color: #896F42;
+    width: 100px;
+    border: 2px solid #896F42;
+    text-align: center;
+    color: white;
+    border-radius: 100px;
 }
 
-.THIS .select{
-    width : 150px;
-    margin-right : 20px;
+.THIS .input {
+    width: 400px;
+    margin-right: 20px;
+}
+
+.THIS .select {
+    width: 150px;
+    margin-right: 20px;
 }
