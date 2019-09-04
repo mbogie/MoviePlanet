@@ -4,6 +4,8 @@ public class MPPopularMoviesWrapper {
         @AuraEnabled public String poster_path;
         @AuraEnabled public Integer id;
         @AuraEnabled public String title;
+        @AuraEnabled public String source;
+
     }
 
     @AuraEnabled public Integer page;

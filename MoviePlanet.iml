@@ -723,6 +723,30 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="MPActorListItemSmall" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPActorReview" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPHideActorDetailEvent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPHideMovieDetailEvent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPHideReview" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPHideSearchComponentEvent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="MPHomePageEvent" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -731,11 +755,15 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="MPPassActorsEvent" />
+                            <option name="name" value="MPMovieListItemSmall" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="MPPassMoviesEvent" />
+                            <option name="name" value="MPMovieReview" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPMovieSelected" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -743,7 +771,39 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="MPReviewList" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="MPSearchForm" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPSelectedActor" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPSelectedActorEvent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPSelectedMovieEvent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPSetHomePage" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPShowActorDetailComponent" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPShowReviews" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MPShowSearchComponentEvent" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -762,39 +822,11 @@
                             <option name="name" value="setStartUrl" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="MPMovieSelected" />
+                            <option name="name" value="MPGetReviewsEvent" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="MPSelectedMovieEvent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPHideSearchComponentEvent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPShowSearchComponentEvent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPSelectedActor" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPSelectedActorEvent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPShowActorDetailComponent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPHideActorDetailEvent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MPHideMovieDetailEvent" />
+                            <option name="name" value="MPPassSearchValues" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
@@ -954,6 +986,9 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="lg1" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="logo_landing" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="movieplanet" />
@@ -1336,6 +1371,22 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Product_Image__c.Product__c" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c.Comment__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c.Id__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c.Rating__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c.Type__c" />
+                            <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="SurveyQuestionResponse__c.Response__c" />
@@ -2296,6 +2347,10 @@
                             <option name="name" value="RequestsForAccessSIQ" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="Review__c" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="Scorecard" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -2395,6 +2450,9 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Product_Image__c-en_US" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c-en_US" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="SurveyQuestionResponse__c-en_US" />
@@ -3346,6 +3404,9 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="QuoteLineItem-Quote Line Item Layout" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Review__c-Review Layout" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Scorecard-Scorecard Layout" />
@@ -4797,6 +4858,9 @@
                             <option name="name" value="Product_Image__c" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="Review__c" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="SurveyTaker__c" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -5057,6 +5121,9 @@
                             <option name="name" value="SurveyForce_svg4everybody" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="fivestar" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="iEditCSS" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -5159,6 +5226,9 @@
                             <option name="name" value="Product_Image__c" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="Review__c" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="Solution" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -5196,7 +5266,7 @@
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="name" value="BRC Service.Customer_Members" />
+                            <option name="name" value="BRC Service.Members_without_contribution" />
                           </MetadataEntry>
                         </list>
                       </option>

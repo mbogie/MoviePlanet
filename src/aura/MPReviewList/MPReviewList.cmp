@@ -1,0 +1,10 @@
+<aura:component description="MPReviewList" controller="MPSiteController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+
+    <aura:attribute name="context" type="String"/>
+    <aura:attribute name="id" type="String"/>
+    <aura:attribute name="MovieReviews" type="Review__c[]" access="private" />
+<!--    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>-->
+    <aura:handler event="c:MPGetReviewsEvent" action="{!c.MPGetReviewsEvent}"/>
+    <aura:handler event="c:MPShowReviews" action="{!c.MPShowReviews}"/>
+
+</aura:component>

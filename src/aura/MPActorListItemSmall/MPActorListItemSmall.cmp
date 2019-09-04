@@ -1,7 +1,6 @@
-<aura:component description="MPActorListItem" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
-
+<aura:component description="MPActorListItemSmall" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
     <aura:attribute name="actor" type="Object"/>
-<!--    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>-->
+    <!--    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>-->
     <aura:registerEvent name="actorSelect" type="c:MPSelectedActorEvent"/>
     <aura:registerEvent name="hideMovie" type="c:MPHideMovieDetailEvent"/>
     <aura:registerEvent name="showReview" type="c:MPShowReviews"/>
@@ -15,5 +14,4 @@
             </div>
         </div>
     </lightning:button>
-
 </aura:component>

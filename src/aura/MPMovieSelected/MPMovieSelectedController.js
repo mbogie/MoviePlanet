@@ -1,5 +1,6 @@
 ({
     MPSelectedMovieEvent : function(component,event,handler){
+        component.set("v.selectedTabId", "one");
         component.set("v.movie", "{}");
         let movieId = event.getParam("movieId");
         let display = event.getParam('display');
@@ -44,17 +45,23 @@
                            "display" : true
                            });
                            hide.fire();
-    console.log('hide');
+                           let hideReview = $A.get("e.c:MPHideReview");
+                                                                hideReview.setParams({
+                                                                "display" : false,
+                                                                });
+                                                                hideReview.fire();
     },
-        goHome : function(component,event,handler){
-        component.set("v.displayedSection", false)
-        let hide = $A.get("e.c:MPShowSearchComponentEvent");
-                               hide.setParams({
-                               "display" : true
-                               });
-                               hide.fire();
-        console.log('hide');
-        },
+     goHome : function(component,event,handler){
+                component.set("v.displayedSection", false);
+                let showHome = $A.get("e.c:MPSetHomePage");
+                showHome.fire();
+                console.log('home from movie detail');
+                let hideReview = $A.get("e.c:MPHideReview");
+                                                     hideReview.setParams({
+                                                     "display" : false,
+                                                     });
+                                                     hideReview.fire();
+                },
 
     getImages : function(component,event,handler){
         console.log('movie images');
@@ -75,5 +82,59 @@
                        }
                        });
                        $A.enqueueAction(images);
+    },
+    getVideos : function(component,event,handler){
+        console.log('movie videos');
+        let movieId2 = component.get("v.movie").id;
+        let videos = component.get( "c.getMovieTrailers" );
+                videos.setParams({
+                                   movieId: movieId2
+                                   });
+                videos.setCallback( this, function( response ) {
+                if ( component.isValid() && response.getState() === 'SUCCESS' ) {
+                       component.set("v.videos", response.getReturnValue());
+                       console.log(response.getReturnValue());
+                       } else {
+                                     //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
+                       }
+                       });
+                       $A.enqueueAction(videos);
+    },
+
+    addToFavorite : function(component,event,handler){
+        let movieId = component.get("v.movie").id;
+        let addToFB = component.get( "c.addToBFList" );
+                        addToFB.setParams({
+                                           movieId: movieId,
+                                            FBType: 'Favorite'
+                                           });
+                        addToFB.setCallback( this, function( response ) {
+                        if ( component.isValid() && response.getState() === 'SUCCESS' ) {
+                               component.set("v.movie", response.getReturnValue());
+                               console.log(response.getReturnValue());
+                          } else {
+                                             //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
+                          }
+                         });
+        $A.enqueueAction(addToFB);
+    },
+
+    addToBlacklist : function(component,event,handler){
+       let movieId = component.get("v.movie").id;
+        let addToFB = component.get( "c.addToBFList" );
+                   addToFB.setParams({
+                   movieId: movieId,
+                  FBType: 'Black List'
+                  });
+             addToFB.setCallback( this, function( response ) {
+             if ( component.isValid() && response.getState() === 'SUCCESS' ) {
+              component.set("v.movie", response.getReturnValue());
+           console.log(response.getReturnValue());
+           } else {
+             //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
+          }
+         });
+        $A.enqueueAction(addToFB);
     }
+
 })

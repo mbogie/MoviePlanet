@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="MPShowReviews">
+    <aura:attribute name="display" type="Boolean" default="false"/>
+    <aura:attribute name="context" type="String"/>
+    <aura:attribute name="id" type="String"/>
+</aura:event>

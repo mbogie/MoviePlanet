@@ -1,42 +1,70 @@
-<aura:component description="MPSearchForm" controller="MPSiteController" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+<aura:component description="MPSearchForm" controller="MPSiteController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
 
     <aura:attribute name="query" type="String" default=""/>
     <aura:attribute name="sType" type="String[]" default="Actor,Movie"/>
     <aura:attribute name="selectedType" type="String" default="Actor"/>
-    <aura:attribute name="displayedSection" type="Boolean" default="true" />
+    <aura:attribute name="displayedSection" type="Boolean" default="true"/>
+    <aura:attribute name="newMovie" type="Movie__c" default="{}"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" default=""/>
+    <aura:attribute name="showBFList" type="Boolean" default="false"/>
 
-    <aura:registerEvent name="passMovies" type="c:MPPassMoviesEvent"/>
-    <aura:registerEvent name="passActors" type="c:MPPassActorsEvent"/>
+    <aura:registerEvent name="passValues" type="c:MPPassSearchValues"/>
     <aura:registerEvent name="goHome" type="c:MPHomePageEvent"/>
     <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
     <aura:handler event="c:MPShowSearchComponentEvent" action="{!c.MPShowSearchComponentEvent}"/>
+    <aura:handler event="c:MPSetHomePage" action="{!c.MPSetHomePage}"/>
 
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
-    <lightning:card title="" class="card">
-        <lightning:layout verticalAlign="end">
-            <div style="width : 49%; float :left; margin-left : 20px">
-                <lightning:button class="slds-button" variant="brand" label="Home" onclick="{!c.goHome}"/>
-            </div>
-            <div style="width : 49%; float :right; text-align : right; margin-right : 10px">
-                <lightning:button class="slds-button" variant="brand" label="Favourite" onclick="{!c.favourite}"/>
-                <lightning:button class="slds-button" variant="brand" label="Black List" onclick="{!c.blacklist}"/>
-            </div>
-        </lightning:layout>
-        <lightning:layout horizontalAlign="center" verticalAlign="end">
-        <lightning:layoutItem padding="horizontal-medium" class="slds-grid_vertical-align-center">
-                <lightning:input name="query" label="" value="{!v.query}"/>
-            </lightning:layoutItem>
-            <lightning:layoutItem padding="horizontal-medium" class="slds-grid_vertical-align-center">
-                <lightning:select aura:id="searchTypes" name="selectType" label="">
-                    <aura:iteration items="{!v.sType}" var="sType">
-                        <option text="{!sType}" value="{!sType}"/>
-                    </aura:iteration>
-                </lightning:select>
-            </lightning:layoutItem>
-            <lightning:layoutItem class="slds-grid_vertical-align-center" padding="horizontal-medium">
-                <lightning:button class="slds-button" variant="brand" label="Search" onclick="{!c.onFormSubmit}"/>
-            </lightning:layoutItem>
-        </lightning:layout>
-    </lightning:card>
+        <lightning:card title="" class="card">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem class="homeButton" >
+                        <button class="customButton" onclick="{!c.goHome}"> Home</button>
+                </lightning:layoutItem>
+                <lightning:layoutItem alignmentBump="left">
+                    <button class="rightButtons" onclick="{!c.openModel}">Add New Movie</button>
+                    <button class="rightButtons" onclick="{!c.blacklist}">Favorite And Blacklist</button>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout horizontalAlign="center" verticalAlign="center">
+                    <lightning:input class="input" name="query" label="" value="{!v.query}"/>
+                    <lightning:select aura:id="searchTypes" name="selectType" label="" class="select">
+                        <aura:iteration items="{!v.sType}" var="sType">
+                            <option text="{!sType}" value="{!sType}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                <button class="customButton" style="margin-top : 18px" onclick="{!c.onFormSubmit}"> Search</button>
+            </lightning:layout>
+        </lightning:card>
     </div>
+    <aura:if isTrue="{!v.isOpen}">
+        <!--###### MODAL BOX Start######-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <header class="slds-modal__header" style="background-color : gray">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.onCancel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Movie</h2>
+                </header>
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="background-color : gray">
+                    <lightning:recordForm aura:id="recordViewForm"
+                                          objectApiName="Movie__c"
+                                          columns="2"
+                                          layoutType="Full"
+                                          mode="edit"
+                                          onsubmit="{!c.onSubmit}"
+                                          oncancel="{!c.onCancel}"
+                    />
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
 </aura:component>

@@ -2,72 +2,133 @@
                 implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
 
     <aura:attribute name="movie" type="Object"/>
+    <aura:attribute name="selectedTabId" type="String"/>
     <aura:attribute name="actors" type="Object[]"/>
     <aura:attribute name="images" type="Object[]"/>
+    <aura:attribute name="videos" type="Object[]"/>
     <aura:attribute name="displayedSection" type="Boolean" default="false"/>
 
     <aura:handler event="c:MPSelectedMovieEvent" action="{!c.MPSelectedMovieEvent}"/>
     <aura:handler event="c:MPHideMovieDetailEvent" action="{!c.MPHideMovieDetailEvent}"/>
     <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
+    <aura:registerEvent name="goHome" type="c:MPSetHomePage"/>
     <aura:registerEvent name="MPShowSearchComponentEvent" type="c:MPShowSearchComponentEvent"/>
+    <aura:registerEvent name="hideReview" type="c:MPHideReview"/>
 
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
-    <lightning:card title="">
-        <lightning:layout verticalAlign="end">
-            <div style="width : 49%; float :left; margin-left : 20px; margin-bottom : 50px">
-                <lightning:button class="slds-button" variant="brand" label="Back to Search Page" onclick="{!c.goBack}"/>
-                <lightning:button class="slds-button" variant="brand" label="Go Back" onclick="{!c.goBack}"/>
-            </div>
-        </lightning:layout>
-        <lightning:layout multipleRows="false">
-            <div style="margin-bottom : 50px">
-            <lightning:layoutItem>
-                <div style="float :left; margin-left : 20px; width: 49%">
-                    <img src="{!empty(v.movie.poster_path) ? $Resource.MP_Default :'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + v.movie.poster_path}"/>
+        <lightning:card title="">
+            <lightning:layout verticalAlign="end">
+                <div style="width : 49%; float :left; margin-left : 20px; margin-bottom : 50px">
+                    <lightning:button class="slds-button" variant="brand" label="Home Page" onclick="{!c.goHome}"/>
+                    <lightning:button class="slds-button" variant="brand" label="Back to Search Page"
+                                      onclick="{!c.goBack}"/>
                 </div>
-                <div style="float :right; padding-left: 20px; width:49%; padding-right: 20px">
-                    {!v.movie.title} <br/>
-                    Budget: {!v.movie.budget}<br/>
-                    Homepage: <a href="{!v.movie.homepage}">{!v.movie.homepage}</a><br/>
-                    Release Date : {!v.movie.release_date}<br/>
-                    {!v.movie.budget}<br/>
-                    {!v.movie.budget}<br/>
-                    Overview: {!v.movie.overview}<br/>
-                </div>
-            </lightning:layoutItem>
-            </div>
-        </lightning:layout>
-            <lightning:layout multipleRows="true">
+            </lightning:layout>
+            <lightning:layout multipleRows="false">
                 <lightning:layoutItem>
-                    <lightning:tabset selectedTabId="one">
-                        <lightning:tab label="Cast" id="one">
-                            <lightning:layout multipleRows="true" horizontalAlign="center">
-                                <aura:iteration items="{!v.actors}" var="actor">
-                                    <div style="margin-bottom: 20px;">
-                                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
-                                            <c:MPActorListItem actor="{!actor}"/>
-                                        </lightning:layoutItem>
-                                    </div>
-                                </aura:iteration>
-                            </lightning:layout>
-                        </lightning:tab>
-                        <lightning:tab label="Images" id="two" onactive="{!c.getImages}">
-                            <lightning:layout multipleRows="true" horizontalAlign="center">
-                                <aura:iteration items="{!v.images}" var="image">
-                                    <div style="margin-bottom: 20px;">
-                                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
-                                            <img src="{!'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + image.file_path}"/>
-                                        </lightning:layoutItem>
-                                    </div>
-                                </aura:iteration>
-                            </lightning:layout>
-                        </lightning:tab>
-                        <lightning:tab label="Videos" id="three">
-                            Videos
-                        </lightning:tab>
-                    </lightning:tabset>
+                    <div>
+                    <div class="title">
+                    {!v.movie.title} <br/>
+                    </div>
+                        <div style="text-align: right; margin-right: 20px">
+                            <lightning:button variant="base" label="Base" title="Add to Favorite" onclick="{! c.addToFavorite }">
+                            <lightning:icon class="{!if(equals(v.movie.FBtype, 'Favorite'),'favorite','')}" iconName="utility:favorite" size="large"/>
+                            </lightning:button>
+                            <lightning:button variant="base" label="Base" title="Add to Blac List" onclick="{! c.addToBlacklist }">
+                                <lightning:icon class="{!if(equals(v.movie.FBtype, 'Black List'),'blacklist','')}" iconName="utility:ban" size="large"/>
+                            </lightning:button>
+                        </div><br/>
+                        <div style="clear : both"></div>
+                    </div>
+                    <div style="float :left; margin-left : 20px; width: 49%">
+                        <img src="{!empty(v.movie.poster_path) ? $Resource.MP_Default :'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + v.movie.poster_path}"/>
+                    </div>
+                    <div style="float :right; padding-left: 20px; width:49%; padding-right: 20px">
+                        <p>
+                        <div align="center">
+                            <aura:iteration items="{!v.movie.genres}" var="genre">
+                                <div class="genre">
+                                        {!genre.name}
+                                </div>
+                            </aura:iteration>
+                        </div>
+                        </p>
+                        <br/><br/><br/>
+                        <p>
+                        Homepage: <a href="{!v.movie.homepage}">{!v.movie.homepage}</a><br/>
+                        Release Date : {!v.movie.release_date}<br/>
+                        Budget: <lightning:formattedNumber
+                        value="{!v.movie.budget}"
+                        style="currency"
+                        minimumFractionDigits="2"
+                        maximumFractionDigits="2"/><br/>
+                        Production Companies:<br/>
+                        <aura:iteration items="{!v.movie.production_companies}" var="prod">
+                            <div style="margin-left : 120px">
+                               - {!prod.name} <br/>
+                            </div>
+                        </aura:iteration>
+                        <br/><br/><br/>
+                        </p>
+                        Overview: {!v.movie.overview}<br/>
+                    </div>
                 </lightning:layoutItem>
             </lightning:layout>
-    </lightning:card>
+            <lightning:layout multipleRows="true">
+                <div style="margin : 20px">
+                    <lightning:layoutItem>
+                        <lightning:tabset selectedTabId="{!v.selectedTabId}">
+                            <lightning:tab label="Cast" id="one">
+                                <lightning:layout multipleRows="true" horizontalAlign="center">
+                                    <aura:if isTrue="{!not(empty(v.actors))}">
+                                    <aura:iteration items="{!v.actors}" var="actor">
+                                        <div style="margin-bottom: 20px;">
+                                            <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                                                <c:MPActorListItemSmall actor="{!actor}"/>
+                                            </lightning:layoutItem>
+                                        </div>
+                                    </aura:iteration>
+                                        <aura:set attribute="else">
+                                            No Cast to display.
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:layout>
+                            </lightning:tab>
+                            <lightning:tab label="Images" id="two" onactive="{!c.getImages}">
+                                <lightning:layout multipleRows="true" horizontalAlign="center">
+                                    <aura:if isTrue="{!not(empty(v.images))}">
+                                    <aura:iteration items="{!v.images}" var="image">
+                                        <div style="margin-bottom: 20px;">
+                                            <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                                                <a href="{!'https://image.tmdb.org/t/p/original' + image.file_path}"
+                                                   target="_blank">
+                                                    <img src="{!'http://image.tmdb.org/t/p/w185/' + image.file_path}"/>
+                                                </a>
+                                            </lightning:layoutItem>
+                                        </div>
+                                    </aura:iteration>
+                                        <aura:set attribute="else">
+                                            No Images to display.
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:layout>
+                            </lightning:tab>
+                            <lightning:tab label="Trailer" id="three" onactive="{!c.getVideos}">
+                                <lightning:layout multipleRows="true" horizontalAlign="center">
+                                    <aura:if isTrue="{!not(empty(v.videos))}">
+                                    <lightning:layoutItem flexibility="auto">
+                                    <iframe width="1008" height="567" src="{!'https://www.youtube.com/embed/' + v.videos[0].key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe>
+                                    </lightning:layoutItem>
+                                        <aura:set attribute="else">
+                                            No Videos to display.
+                                        </aura:set>
+                                    </aura:if>
+                                </lightning:layout>
+                            </lightning:tab>
+                        </lightning:tabset>
+                    </lightning:layoutItem>
+                </div>
+            </lightning:layout>
+        </lightning:card>
     </div>
 </aura:component>

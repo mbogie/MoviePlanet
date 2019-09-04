@@ -2,14 +2,17 @@
                 implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
 
     <aura:attribute name="popularMovies" type="Object[]"/>
-    <aura:attribute name="searchedMovies" type="Object[]"/>
-    <aura:attribute name="searchedActors" type="Object[]"/>
+    <aura:attribute name="searchedMovies" type="Object"/>
+    <aura:attribute name="searchedActors" type="Object"/>
+    <aura:attribute name="bf" type="Object"/>
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="pageNumber" type="Integer"/>
     <aura:attribute name="context" type="String" default="popular"/>
+    <aura:attribute name="query" type="String"/>
     <aura:attribute name="displayedSection" type="Boolean" default="true" />
 
     <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
-    <aura:handler event="c:MPPassMoviesEvent" action="{!c.MPPassMoviesEvent}"/>
-    <aura:handler event="c:MPPassActorsEvent" action="{!c.MPPassActorsEvent}"/>
+    <aura:handler event="c:MPPassSearchValues" action="{!c.MPPassSearchValues}"/>
     <aura:handler event="c:MPHomePageEvent" action="{!c.MPHomePageEvent}"/>
     <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
     <aura:handler event="c:MPShowSearchComponentEvent" action="{!c.MPShowSearchComponentEvent}"/>
@@ -17,41 +20,108 @@
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
     <lightning:card title="" class="card">
         <aura:if isTrue="{!v.context  == 'popular' }">
-        <lightning:layout multipleRows="false" horizontalAlign="center">
-            <div align="center" style="margin-bottom : 30px">
-                <h1>Welcome on page. Popular Movies</h1>
-            </div>
+        <lightning:layout class="header" multipleRows="false" horizontalAlign="center">
+                Welcome on Movie Planet
         </lightning:layout>
+            <lightning:layout class="popular" multipleRows="false">
+                    Popular:
+            </lightning:layout>
         </aura:if>
-        <lightning:layout multipleRows="true" horizontalAlign="center">
+            <lightning:layout multipleRows="true" horizontalAlign="center">
             <aura:if isTrue="{!v.context  == 'popular' }">
                 <aura:iteration items="{!v.popularMovies}" var="popular">
                     <div style="margin-bottom: 20px">
                     <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
-                        <c:MPMovieListItem movie="{!popular}"/>
+                        <c:MPMovieListItemSmall movie="{!popular}"/>
                     </lightning:layoutItem>
                     </div>
                 </aura:iteration>
             </aura:if>
-            <aura:if isTrue="{!v.context  == 'movie' }">
-                <aura:iteration items="{!v.searchedMovies}" var="movie">
+            </lightning:layout>
+            <aura:if isTrue="{!v.context  == 'Movie' }">
+               <lightning:layout multipleRows="false" class="pagin" horizontalAlign="center">
+                   <aura:if isTrue="{!greaterthanorequal(v.pageNumber, 2)}">
+                    <lightning:button variant="base" label="Base" title="Previous Page" onclick="{! c.previousPage }">
+                        <lightning:icon class="button" iconName="utility:chevronleft" size="x-small"/>
+                        <lightning:icon class="button" iconName="utility:back" size="x-small"/>
+                       </lightning:button>
+                   </aura:if>
+                   <div style="font-size: 25px; color: #896F42">
+                       <b>{!v.pageNumber}</b>
+                   </div>
+                   <aura:if isTrue="{!lessthan(v.pageNumber, v.totalPages)}">
+                       <lightning:button variant="base" label="Base" title="Next Page" onclick="{! c.nextPage }">
+                           <lightning:icon class="button" iconName="utility:forward" size="x-small"/>
+                           <lightning:icon class="button" iconName="utility:chevronright" size="x-small"/>
+                       </lightning:button>
+                   </aura:if>
+               </lightning:layout>
+                <lightning:layout multipleRows="true" horizontalAlign="center" >
+                <aura:iteration items="{!v.searchedMovies.results}" var="movie">
                     <div style="margin-bottom: 20px">
                     <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
                         <c:MPMovieListItem movie="{!movie}"/>
                     </lightning:layoutItem>
                     </div>
                 </aura:iteration>
+                </lightning:layout>
             </aura:if>
-            <aura:if isTrue="{!v.context  == 'actor' }">
-                <aura:iteration items="{!v.searchedActors}" var="actor">
+            <aura:if isTrue="{!v.context  == 'Actor' }">
+                <lightning:layout multipleRows="false" class="pagin" horizontalAlign="center">
+                    <aura:if isTrue="{!greaterthanorequal(v.pageNumber, 2)}">
+                        <lightning:button variant="base" label="Base" title="Previous Page" onclick="{! c.previousPage }">
+                            <lightning:icon class="button" iconName="utility:chevronleft" size="x-small"/>
+                            <lightning:icon class="button" iconName="utility:back" size="x-small"/>
+                        </lightning:button>
+                    </aura:if>
+                    <div style="font-size: 25px; color: #896F42">
+                        <b>{!v.pageNumber}</b>
+                    </div>
+                    <aura:if isTrue="{!lessthan(v.pageNumber, v.totalPages)}">
+                        <lightning:button variant="base" label="Base" title="Next Page" onclick="{! c.nextPage }">
+                            <lightning:icon class="button" iconName="utility:forward" size="x-small"/>
+                            <lightning:icon class="button" iconName="utility:chevronright" size="x-small"/>
+                        </lightning:button>
+                    </aura:if>
+                </lightning:layout>
+                <lightning:layout multipleRows="true" horizontalAlign="center" >
+                <aura:iteration items="{!v.searchedActors.results}" var="actor">
                     <div style="margin-bottom: 20px">
                     <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
                         <c:MPActorListItem actor="{!actor}"/>
                     </lightning:layoutItem>
                     </div>
                 </aura:iteration>
+                </lightning:layout>
             </aura:if>
-        </lightning:layout>
+        <aura:if isTrue="{!v.context  == 'BF' }">
+            <lightning:layout class="bf" multipleRows="false">
+                Favorite:
+                <hr/>
+            </lightning:layout>
+            <lightning:layout multipleRows="true" horizontalAlign="center" >
+                <aura:iteration items="{!v.bf.favorite}" var="favorite">
+                    <div style="margin-bottom: 20px">
+                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                            <c:MPMovieListItemSmall movie="{!favorite}"/>
+                        </lightning:layoutItem>
+                    </div>
+                </aura:iteration>
+            </lightning:layout>
+            <lightning:layout class="bf" multipleRows="false">
+                Blacklist:
+                <hr/>
+            </lightning:layout>
+            <lightning:layout multipleRows="true" horizontalAlign="center" >
+                <aura:iteration items="{!v.bf.blacklist}" var="blacklist">
+                    <div style="margin-bottom: 20px">
+                        <lightning:layoutItem flexibility="grow" class="slds-m-right_small">
+                            <c:MPMovieListItemSmall movie="{!blacklist}"/>
+                        </lightning:layoutItem>
+                    </div>
+                </aura:iteration>
+            </lightning:layout>
+        </aura:if>
     </lightning:card>
     </div>
 </aura:component>

@@ -1,8 +1,8 @@
 public class MPMovieSearchWrapper {
 
-    public Integer page;
-    public Integer total_results;
-    public Integer total_pages;
+    @AuraEnabled public Integer page;
+    @AuraEnabled public Integer total_results;
+    @AuraEnabled public Integer total_pages;
     @AuraEnabled public List<Movies> results;
 
     public class Movies {
@@ -19,5 +19,13 @@ public class MPMovieSearchWrapper {
 //        public Boolean adult;
 //        public String overview;
         @AuraEnabled public String poster_path;
+        @AuraEnabled public String source;
+
+        public Movies(Movie__c movie){
+            id = movie.Id;
+            title = movie.Name;
+            poster_path = movie.Poster_path__c;
+            source = 'internal';
+        }
     }
 }

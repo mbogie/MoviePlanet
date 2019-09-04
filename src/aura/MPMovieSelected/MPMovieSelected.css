@@ -1,0 +1,22 @@
+.THIS .genre {
+    margin : 3px;
+    border : 1px solid brown;
+    width : 100px;
+    float : left;
+    border-radius: 12px;
+}
+
+.THIS .title {
+    margin-left : 20px;
+    margin-bottom : 20px;
+    font-size : 30px;
+    float : left;
+}
+
+.THIS .blacklist svg {
+    fill : red;
+}
+
+.THIS .favorite svg {
+    fill : yellow;
+}

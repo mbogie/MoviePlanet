@@ -65,19 +65,19 @@ public with sharing class MPRestController {
         return genresWrapper.genres;
     }
 
-    public static List<MPMovieSearchWrapper.Movies> searchMovies(String query) {
-        String endpoint = MOVIE_DB_URL + '/search/movie?' + MOVIE_DB_API_KEY + '&query=' + query;
+    public static MPMovieSearchWrapper searchMovies(String query, integer page) {
+        String endpoint = MOVIE_DB_URL + '/search/movie?' + MOVIE_DB_API_KEY + '&query=' + query +'&page=' + page ;
         String jsonString = getDbValues(endpoint);
         MPMovieSearchWrapper movieSearchWrapper = (MPMovieSearchWrapper) System.JSON.deserialize(jsonString, MPMovieSearchWrapper.class);
-        return movieSearchWrapper.results;
+        return movieSearchWrapper;
     }
 
-    public static List<MPActorSearchWrapper.Actors> searchActors(String query) {
-        String endpoint = MOVIE_DB_URL + '/search/person?' + MOVIE_DB_API_KEY + '&query=' + query;
+    public static MPActorSearchWrapper searchActors(String query, Integer page) {
+        String endpoint = MOVIE_DB_URL + '/search/person?' + MOVIE_DB_API_KEY + '&query=' + query +'&page=' + page ;
         String jsonString = getDbValues(endpoint);
         MPActorSearchWrapper actorSearchWrapper = (MPActorSearchWrapper) System.JSON.deserialize(jsonString, MPActorSearchWrapper.class);
-        return actorSearchWrapper.results;
-    }
+        return actorSearchWrapper;
+}
 
     public static List<MPMovieImagesWrapper.Backdrops> getMovieImages(String movieId) {
         String endpoint = MOVIE_DB_URL + '/movie/' + movieId + '/images?' + MOVIE_DB_API_KEY;

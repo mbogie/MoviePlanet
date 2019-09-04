@@ -1,15 +1,15 @@
 public class MPMovieVideosWrapper {
 
     public Integer id;
-    public List<Trailer> results;
+    @AuraEnabled public List<Trailer> results;
 
     public class Trailer {
       //  public String id;
       //  public String iso_639_1;
      //   public String iso_3166_1;
-        public String key;
-        public String name;
-        public String site;
+        @AuraEnabled public String key;
+        @AuraEnabled public String name;
+        @AuraEnabled public String site;
      //   public Integer size;
     }
 }

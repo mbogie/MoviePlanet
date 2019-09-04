@@ -1,0 +1,22 @@
+<aura:component description="MPActorReview" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+
+    <aura:attribute name="displayedSection" type="Boolean" default="false"/>
+    <aura:attribute name="context" type="String"/>
+    <aura:attribute name="id" type="String"/>
+    <aura:handler event="c:MPShowReviews" action="{!c.MPShowReviews}"/>
+    <aura:handler event="c:MPHideReview" action="{!c.MPHideReview}"/>
+
+    <aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>
+
+    <div aura:id="section" class="{!if( and(v.displayedSection, equals(v.context, 'Actor')),'slds-show','slds-hide')}">
+        <lightning:tabset variant="scoped" selectedTabId="one">
+            <lightning:tab label="Reviews" id="one" >
+                <!--                <c:BoatReviews boat="{!v.boat}"  aura:id="BRcmp"/>-->
+            </lightning:tab>
+            <lightning:tab label="Add Review" id="two" >
+                <!--                <c:AddBoatReview boat="{!v.boat}"/>-->
+            </lightning:tab>
+        </lightning:tabset>
+    </div>
+
+</aura:component>
