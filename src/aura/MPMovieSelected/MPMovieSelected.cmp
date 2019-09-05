@@ -28,12 +28,12 @@
                 <lightning:layoutItem alignmentBump="left" class="rightPanel">
                     <lightning:button variant="base" label="Base" title="Add to Favorite"
                                       onclick="{! c.addToFavorite }">
-                        <lightning:icon class="{!if(equals(v.movie.FBType, 'Favorite'),'favorite','')}"
+                        <lightning:icon class="{!if(equals(v.movie.FBtype, 'Favorite'),'favorite','')}"
                                         iconName="utility:favorite" size="large"/>
                     </lightning:button>
                     <lightning:button variant="base" label="Base" title="Add to Blac List"
                                       onclick="{! c.addToBlacklist }">
-                        <lightning:icon class="{!if(equals(v.movie.FBType, 'Black List'),'blacklist','')}"
+                        <lightning:icon class="{!if(equals(v.movie.FBtype, 'Black List'),'blacklist','')}"
                                         iconName="utility:ban" size="large"/>
                     </lightning:button>
                 </lightning:layoutItem>

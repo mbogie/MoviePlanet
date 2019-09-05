@@ -1,7 +1,7 @@
 ({
     doInit: function (component, event, helper) {
-        let fbType = component.get("v.movie").FBtype;
-        console.log(FBType == 'Black List');
+        let FBType = component.get("v.movie").FBType;
+        console.log(FBType === 'Black List');
         component.set("v.FBType", FBType);
     },
 

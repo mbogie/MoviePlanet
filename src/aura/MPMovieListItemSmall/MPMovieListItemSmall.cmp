@@ -8,29 +8,27 @@
     <aura:registerEvent name="showReview" type="c:MPShowReviews"/>
     <aura:registerEvent name="hideSearchComponent" type="c:MPHideSearchComponentEvent"/>
 
-    <aura:if isTrue="{!if(equals(v.FBType ,'Black List'))}">
         <lightning:button class="image" onclick="{!c.onSelect}">
+            <aura:if isTrue="{!if(equals(v.movie.FBtype ,'Black List'))}">
             <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.movie.poster_path + ')'}"
                  class="blacklist">
                 <div class="lower-third">
                     <h1 class="slds-truncate">{!v.movie.title}</h1>
                 </div>
+                <div class="icon">
+                    <h1>
+                        <lightning:icon class="red" iconName="utility:ban" size="large"/>
+                    </h1>
+                </div>
             </div>
-        </lightning:button>
-        <aura:set attribute="else">
-            <lightning:button class="image" onclick="{!c.onSelect}">
+            </aura:if>
+            <aura:if isTrue="{!if(equals(v.movie.FBtype ,'Favorite'))}">
                 <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.movie.poster_path + ')'}"
-                     class="blacklist">
+                     class="innertile">
                     <div class="lower-third">
                         <h1 class="slds-truncate">{!v.movie.title}</h1>
                     </div>
-                    <div class="icon">
-                        <h1>
-                            <lightning:icon class="red" iconName="utility:ban" size="large"/>
-                        </h1>
-                    </div>
                 </div>
-            </lightning:button>
-        </aura:set>
-    </aura:if>
+            </aura:if>
+        </lightning:button>
 </aura:component>
