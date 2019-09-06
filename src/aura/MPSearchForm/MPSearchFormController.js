@@ -1,5 +1,9 @@
 ({
-showSpinner: function(component, event, helper) {
+   doInit: function(component, event, helper) {
+          helper.onInit(component, event,helper);
+   },
+
+   showSpinner: function(component, event, helper) {
        // make Spinner attribute true for display loading spinner
         component.set("v.Spinner", true);
    },
@@ -70,6 +74,8 @@ showSpinner: function(component, event, helper) {
     onCancel: function (component, event, helper) {
         event.preventDefault();
         component.set("v.isOpen", false);
+        helper.onInit(component, event,helper);
+
     },
 handleCreateLoad: function (cmp, event, helper) {
         let nameFieldValue = cmp.find("nameField").set("v.value", "My New Account");

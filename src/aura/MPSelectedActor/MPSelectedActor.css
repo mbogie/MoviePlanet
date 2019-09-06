@@ -62,3 +62,15 @@
     padding-right: 25px;
     padding-left: 25px;
 }
+
+.THIS .slds-tabs_default__item {
+    color: white;
+}
+
+.THIS .slds-tabs_default__nav {
+     color: white;
+}
+
+.THIS .slds-tabs_default__link {
+    color: white;
+}

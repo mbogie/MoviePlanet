@@ -43,3 +43,20 @@
   position: fixed;
   opacity : 0.5;
 }
+
+.THIS .slds-text-heading_medium {
+    color: white;
+}
+
+.THIS .slds-form-element__label {
+    color: white;
+}
+
+.THIS .slds-button {
+    color: white;
+}
+
+/*.THIS .slds-progress__list {
+    background-color: #896F42;
+}*/
+
