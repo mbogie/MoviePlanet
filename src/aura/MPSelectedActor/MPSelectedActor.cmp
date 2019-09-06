@@ -12,6 +12,11 @@
     <aura:registerEvent name="MPShowSearchComponentEvent" type="c:MPShowSearchComponentEvent"/>
     <aura:registerEvent name="goHome" type="c:MPSetHomePage"/>
     <aura:registerEvent name="hideReview" type="c:MPHideReview"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner variant="brand" alternativeText="Loading" size="large"/>
+    </aura:if>
 
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
         <lightning:card title="" class="card">

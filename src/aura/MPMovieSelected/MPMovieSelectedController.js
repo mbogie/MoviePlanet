@@ -1,5 +1,7 @@
 ({
     MPSelectedMovieEvent: function (component, event, handler) {
+                        component.set("v.Spinner", true);
+
         component.set("v.selectedTabId", "one");
         component.set("v.movie", "{}");
         let movieId = event.getParam("movieId");
@@ -31,6 +33,8 @@
             }
         });
         $A.enqueueAction(getCast);
+                       component.set("v.Spinner", false);
+
     },
 
     MPHideMovieDetailEvent: function (component, event, handler) {
@@ -51,6 +55,7 @@
         });
         hideReview.fire();
     },
+
     goHome: function (component, event, handler) {
         component.set("v.displayedSection", false);
         let showHome = $A.get("e.c:MPSetHomePage");
@@ -106,7 +111,7 @@
         let addToFB = component.get("c.addToBFList");
         addToFB.setParams({
             movieId: movieId,
-            FBType: 'Favorite'
+            fbtype: 'Favorite'
         });
         addToFB.setCallback(this, function (response) {
             if (component.isValid() && response.getState() === 'SUCCESS') {
@@ -124,7 +129,7 @@
         let addToFB = component.get("c.addToBFList");
         addToFB.setParams({
             movieId: movieId,
-            FBType: 'Black List'
+            fbtype: 'Black List'
         });
         addToFB.setCallback(this, function (response) {
             if (component.isValid() && response.getState() === 'SUCCESS') {

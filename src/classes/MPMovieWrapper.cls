@@ -27,7 +27,7 @@ public class MPMovieWrapper {
     @AuraEnabled public Decimal runtime;
     @AuraEnabled public String title;
     @AuraEnabled public String source;
-    @AuraEnabled public String FBType;
+    @AuraEnabled public String fbtype;
 
     public class Production_companies {
         @AuraEnabled public Integer id;

@@ -23,6 +23,8 @@ public class MPActorFilmographyWrapper {
         @AuraEnabled public String title {get;set;}
         @AuraEnabled public String id {get;set;}
         @AuraEnabled public String poster_path {get;set;}
+        @AuraEnabled public String source {get;set;}
+        @AuraEnabled public String fbtype {get;set;}
 
         public Cast_Z(JSONParser parser) {
             while (parser.nextToken() != System.JSONToken.END_OBJECT) {

@@ -30,13 +30,13 @@
 }
 
 .THIS .blacklist {
-    position: relative;
-    display: inline-block;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    background-size: 150px 200px;
     background-position: center;
     background-repeat: no-repeat;
-    height: 180px;
-    width: 130px;
-    padding: 5px !important;
+    width: 100%;
+    height: 100%;
     filter: brightness(30%);
 }
 
@@ -47,4 +47,26 @@
 
 .THIS .icon {
     filter: brightness(100%);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 6px 8px;
+}
+
+.THIS .yellow svg {
+    fill: yellow;
+    filter: brightness(100%);
+}
+
+.THIS .favorite {
+    filter: brightness(100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 6px 8px;
 }

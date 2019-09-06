@@ -1,0 +1,9 @@
+.THIS .customButton {
+    font-size: 15px;
+    background-color: #896F42;
+    width: 150px;
+    border: 2px solid #896F42;
+    text-align: center;
+    color: white;
+    border-radius: 100px;
+}

@@ -1,5 +1,7 @@
 ({
     MPSelectedActorEvent: function (component, event, handler) {
+                       component.set("v.Spinner", true);
+
         component.set("v.selectedTabId", "one");
         component.set("v.actor", "{}");
         let actorId = event.getParam("actorId");
@@ -31,6 +33,7 @@
             }
         });
         $A.enqueueAction(getMovies);
+               component.set("v.Spinner", false);
 
 
     },
@@ -41,7 +44,6 @@
             "display": true
         });
         hide.fire();
-        console.log('hide');
         let hideReview = $A.get("e.c:MPHideReview");
         hideReview.setParams({
             "display": false,

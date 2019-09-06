@@ -9,12 +9,20 @@
     <aura:attribute name="isOpen" type="boolean" default="false"/>
     <aura:attribute name="recordId" type="String" default=""/>
     <aura:attribute name="showBFList" type="Boolean" default="false"/>
+    <aura:attribute name="val" type="String" default=""/>
 
     <aura:registerEvent name="passValues" type="c:MPPassSearchValues"/>
     <aura:registerEvent name="goHome" type="c:MPHomePageEvent"/>
     <aura:handler event="c:MPHideSearchComponentEvent" action="{!c.MPHideSearchComponentEvent}"/>
     <aura:handler event="c:MPShowSearchComponentEvent" action="{!c.MPShowSearchComponentEvent}"/>
     <aura:handler event="c:MPSetHomePage" action="{!c.MPSetHomePage}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+
+    <aura:if isTrue="{!v.Spinner}">
+<!--            <lightning:spinner variant="brand" alternativeText="Loading" size="large" />-->
+    </aura:if>
 
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
         <lightning:card title="" class="card">
@@ -54,14 +62,18 @@
                 </header>
                 <!--###### MODAL BOX BODY Part Start######-->
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="background-color : gray">
-                    <lightning:recordForm aura:id="recordViewForm"
-                                          objectApiName="Movie__c"
-                                          columns="2"
-                                          layoutType="Full"
-                                          mode="edit"
-                                          onsubmit="{!c.onSubmit}"
-                                          oncancel="{!c.onCancel}"
-                    />
+                    <lightning:recordEditForm
+                            onsubmit="{!c.handleSubmit}"
+                            onload="{!c.handleCreateLoad}"
+                            objectApiName="Movie__c" class="whitelabel">
+                        <!-- the messages component is for error messages -->
+                        <lightning:messages />
+                       <lightning:inputField fieldName="Name" aura:id="nameField" variant="label-hidden"/>
+                        <lightning:inputField fieldName="Homepage__c" variant="label-hidden" />
+                        <lightning:inputField fieldName="Genres__c" variant="label-hidden" />
+
+                    </lightning:recordEditForm>
+                    <button onclick="{!onSubmit}">Submit</button>
                 </div>
             </div>
         </section>

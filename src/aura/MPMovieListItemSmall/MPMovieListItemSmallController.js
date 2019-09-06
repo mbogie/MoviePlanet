@@ -1,8 +1,8 @@
 ({
     doInit: function (component, event, helper) {
-        let FBType = component.get("v.movie").FBType;
-        console.log(FBType === 'Black List');
-        component.set("v.FBType", FBType);
+        let fbtype = component.get("v.movie").fbtype;
+        console.log(fbtype === 'Black List');
+        component.set("v.fbtype", fbtype);
     },
 
     onSelect: function (component, event, helper) {

@@ -28,7 +28,7 @@ public with sharing class MPSiteController {
             List<Favorited_And_Blacklisted__c> oldList = [Select MovieId__c, Type__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId()];
             for (Favorited_And_Blacklisted__c fb : oldList) {
                 if (movie.id == fb.MovieId__c) {
-                    movie.FBType = fb.Type__c;
+                    movie.fbtype = fb.Type__c;
                 }
             }
             return movie;
@@ -75,6 +75,13 @@ public with sharing class MPSiteController {
     @AuraEnabled
     public static List<MPActorFilmographyWrapper.Cast_Z> getActorFilmography(String actorId) {
         List<MPActorFilmographyWrapper.Cast_Z> filmography = MPRestController.getActorFilmography(actorId);
+        List<Favorited_And_Blacklisted__c> bfList = [SELECT MovieId__c, Type__c, User__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId()];
+        for(MPActorFilmographyWrapper.Cast_Z c : filmography){
+            c.source = 'external';
+            for (Favorited_And_Blacklisted__c item : bfList) {
+                if (c.id == item.MovieId__c) c.fbtype = item.Type__c;
+            }
+        }
         return filmography;
     }
     @AuraEnabled
@@ -91,7 +98,7 @@ public with sharing class MPSiteController {
         for (MPPopularMoviesWrapper.PopularMovies p : popularMovies) {
             p.source = 'external';
             for (Favorited_And_Blacklisted__c item : bfList) {
-                if (p.id == item.MovieId__c) p.FBType = item.Type__c;
+                if (p.id == item.MovieId__c) p.fbtype = item.Type__c;
             }
         }
         return popularMovies;
@@ -111,7 +118,7 @@ public with sharing class MPSiteController {
         for (MPMovieSearchWrapper.Movies w : movies.results) {
             w.source = 'external';
             for (Favorited_And_Blacklisted__c item : bfList) {
-                if (w.id == item.MovieId__c) w.FBType = item.Type__c;
+                if (w.id == item.MovieId__c) w.fbtype = item.Type__c;
             }
         }
         if (page == movies.total_pages) {
@@ -121,7 +128,7 @@ public with sharing class MPSiteController {
                 for (Movie__c m : internalMovies) {
                     MPMovieSearchWrapper.Movies movie = new MPMovieSearchWrapper.Movies(m);
                     for (Favorited_And_Blacklisted__c item : bfList) {
-                        if (movie.id == item.MovieId__c) movie.FBType = item.Type__c;
+                        if (movie.id == item.MovieId__c) movie.fbtype = item.Type__c;
                     }
                     movies.results.add(movie);
                 }
@@ -143,7 +150,7 @@ public with sharing class MPSiteController {
     }
 
     @AuraEnabled
-    public static MPMovieWrapper addToBFList(String movieId, String FBType) {
+    public static MPMovieWrapper addToBFList(String movieId, String fbtype) {
         String oldType = '';
         MPMovieWrapper movie = MPRestController.getMovieById(movieId);
         List<Favorited_And_Blacklisted__c> oldList = [Select Id,Type__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId() AND MovieId__c = :movieId];
@@ -151,13 +158,13 @@ public with sharing class MPSiteController {
             oldType = oldList.get(0).Type__c;
             delete oldList;
         }
-        if (oldType != FBType || oldList.isEmpty()) {
+        if (oldType != fbtype || oldList.isEmpty()) {
             Favorited_And_Blacklisted__c newObject = new Favorited_And_Blacklisted__c();
-            newObject.Type__c = FBType;
+            newObject.Type__c = fbtype;
             newObject.User__c = UserInfo.getUserId();
             newObject.MovieId__c = movieId;
             insert newObject;
-            movie.FBType = FBType;
+            movie.fbtype = fbtype;
         }
         return movie;
     }
@@ -182,7 +189,8 @@ public with sharing class MPSiteController {
         List<MPMovieWrapper> blacklist = new List<MPMovieWrapper>();
         for (Favorited_And_Blacklisted__c item : bfList) {
             MPMovieWrapper movie = MPRestController.getMovieById(item.MovieId__c);
-            movie.FBType = item.Type__c;
+            movie.source = 'external';
+            movie.fbtype = item.Type__c;
             if (item.Type__c == 'Favorite') favorite.add(movie);
             if (item.Type__c == 'Black List') blacklist.add(movie);
         }

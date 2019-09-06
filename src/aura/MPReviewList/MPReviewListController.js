@@ -1,9 +1,10 @@
 ({
+
     MPShowReviews : function(component,event,handler){
         let id = event.getParam("id");
         let context = event.getParam("context");
         let display = event.getParam("display");
-        console.log('review inside');
+        console.log('review inside --> ' + id + ' ' + context);
                 let getReviews = component.get("c.getReviews");
                 getReviews.setParams({
                       objectId: id,
@@ -19,5 +20,6 @@
                                });
                      $A.enqueueAction(getReviews);
          },
+
 
 })

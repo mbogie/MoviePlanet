@@ -22,5 +22,9 @@
                     console.log('after rev');
                 },
 
+    MPReviewAdded : function(component, event, helper){
 
+         component.set("v.tabSelected", "one");
+
+         },
 })

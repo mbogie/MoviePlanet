@@ -5,7 +5,7 @@ public class MPPopularMoviesWrapper {
         @AuraEnabled public String id;
         @AuraEnabled public String title;
         @AuraEnabled public String source;
-        @AuraEnabled public String FBType;
+        @AuraEnabled public String fbtype;
 
     }
 

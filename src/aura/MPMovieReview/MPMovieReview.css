@@ -1,0 +1,40 @@
+.THIS .card {
+    background-color: #322A29;
+    color: white;
+    margin-left: 20px;
+}
+
+.THIS .slds-tabs_scoped__content {
+        background-color: #322A29;
+        color: white;
+}
+
+.THIS .slds-tabs_scoped {
+        background-color: #322A29;
+        color: white;
+}
+
+.THIS .slds-tabs_scoped__nav {
+        background-color: #322A29;
+        color: white;
+}
+
+.THIS .slds-tabs_scoped__link {
+        background-color: #322A29;
+        color: white;
+        border-bottom: 1px solid white;
+        border-right: 1px solid white;
+}
+
+.THIS .slds-tabs_scoped__nav {
+        background-color: #322A29;
+        color: white;
+}
+
+.THIS .slds-form-element__label {
+        color: white;
+}
+
+.THIS .slds-form-element__control {
+        color: black;
+}

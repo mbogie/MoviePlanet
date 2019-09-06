@@ -1,34 +1,79 @@
 <aura:component description="MPMovieListItemSmall" implements="force:appHostable,flexipage:availableForAllPageTypes">
 
     <aura:attribute name="movie" type="Object"/>
-    <aura:attribute name="FBType" type="String"/>
+    <aura:attribute name="fbtype" type="String"/>
     <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
     <aura:registerEvent name="movieSelect" type="c:MPSelectedMovieEvent"/>
     <aura:registerEvent name="hideActor" type="c:MPHideActorDetailEvent"/>
     <aura:registerEvent name="showReview" type="c:MPShowReviews"/>
     <aura:registerEvent name="hideSearchComponent" type="c:MPHideSearchComponentEvent"/>
 
-        <lightning:button class="image" onclick="{!c.onSelect}">
-            <aura:if isTrue="{!if(equals(v.movie.FBtype ,'Black List'))}">
-            <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.movie.poster_path + ')'}"
-                 class="blacklist">
-                <div class="lower-third">
-                    <h1 class="slds-truncate">{!v.movie.title}</h1>
+    <aura:if isTrue="{!equals(v.movie.source, 'internal')}">
+        <aura:if isTrue="{!equals(v.movie.fbtype, 'Black List')}">
+            <lightning:button class="image" onclick="{!c.onSelect}">
+                <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(' + v.movie.poster_path + ')'}"
+                     class="blacklist">
+                    <div class="lower-third">
+                        <h1 class="slds-truncate">{!v.movie.title}</h1>
+                    </div>
                 </div>
                 <div class="icon">
                     <h1>
                         <lightning:icon class="red" iconName="utility:ban" size="large"/>
                     </h1>
                 </div>
-            </div>
-            </aura:if>
-            <aura:if isTrue="{!if(equals(v.movie.FBtype ,'Favorite'))}">
+            </lightning:button>
+            <aura:set attribute="else">
+                <lightning:button class="image" onclick="{!c.onSelect}">
+                    <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(' + v.movie.poster_path + ')'}"
+                         class="innertile">
+                        <div class="lower-third">
+                            <h1 class="slds-truncate">{!v.movie.title}</h1>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{!equals(v.movie.fbtype, 'Favorite')}">
+                        <div class="favorite">
+                            <h1>
+                                <lightning:icon class="yellow" iconName="utility:favorite" size="small"/>
+                            </h1>
+                        </div>
+                    </aura:if>
+                </lightning:button>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!equals(v.movie.source, 'external')}">
+        <aura:if isTrue="{!equals(v.movie.fbtype, 'Black List')}">
+            <lightning:button class="image" onclick="{!c.onSelect}">
                 <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.movie.poster_path + ')'}"
-                     class="innertile">
+                     class="blacklist">
                     <div class="lower-third">
                         <h1 class="slds-truncate">{!v.movie.title}</h1>
                     </div>
                 </div>
-            </aura:if>
-        </lightning:button>
+                <div class="icon">
+                    <h1>
+                        <lightning:icon class="red" iconName="utility:ban" size="large"/>
+                    </h1>
+                </div>
+            </lightning:button>
+            <aura:set attribute="else">
+                <lightning:button class="image" onclick="{!c.onSelect}">
+                    <div style="{!empty(v.movie.poster_path) ? 'background-image:url(' + $Resource.MP_Default + ')' : 'background-image:url(http://image.tmdb.org/t/p/w185/' + v.movie.poster_path + ')'}"
+                         class="innertile">
+                        <div class="lower-third">
+                            <h1 class="slds-truncate">{!v.movie.title}</h1>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{!equals(v.movie.fbtype, 'Favorite')}">
+                        <div class="favorite">
+                            <h1>
+                                <lightning:icon class="yellow" iconName="utility:favorite" size="small"/>
+                            </h1>
+                        </div>
+                    </aura:if>
+                </lightning:button>
+            </aura:set>
+        </aura:if>
+    </aura:if>
 </aura:component>

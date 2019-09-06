@@ -1,4 +1,15 @@
 ({
+showSpinner: function(component, event, helper) {
+       // make Spinner attribute true for display loading spinner
+        component.set("v.Spinner", true);
+   },
+
+ // this function automatic call by aura:doneWaiting event
+    hideSpinner : function(component,event,helper){
+     // make Spinner attribute to false for hide loading spinner
+       component.set("v.Spinner", false);
+    },
+
     onFormSubmit: function (component, event, helper) {
         let context = component.find("searchTypes").get("v.value");
         let query = component.get("v.query");
@@ -42,14 +53,14 @@
     },
 
     MPSetHomePage: function (component, event, handler) {
-        //     console.log('show search form ');
+        component.set("v.displayedSection", true);
         component.set("v.query", "");
+        console.log('jestem w home');
         let showHomePage = $A.get("e.c:MPHomePageEvent");
         showHomePage.setParams({
             "context": "popular"
         });
         showHomePage.fire();
-        component.set("v.displayedSection", true);
     },
 
     openModel: function (component, event, helper) {
@@ -60,8 +71,12 @@
         event.preventDefault();
         component.set("v.isOpen", false);
     },
-
+handleCreateLoad: function (cmp, event, helper) {
+        let nameFieldValue = cmp.find("nameField").set("v.value", "My New Account");
+    },
     onSubmit: function (component, event, helper) {
+        component.find("nameField").set("v.value", "My New Account");
+        component.set("v.val", 'aaa');
         event.preventDefault();
         const fields = event.getParam('fields');
         let movieJson = JSON.stringify(fields);
@@ -69,7 +84,7 @@
         addMovie.setParams({
             movie: movieJson
         });
-        addMovie.setCallback(this, function (response) {
+       /* addMovie.setCallback(this, function (response) {
             if (component.isValid() && response.getState() === 'SUCCESS') {
                 component.set("v.movie", response.getReturnValue());
                 console.log(response.getReturnValue());
@@ -91,7 +106,7 @@
                 //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
             }
         });
-        $A.enqueueAction(addMovie);
+        $A.enqueueAction(addMovie);*/
     },
 
     blacklist: function (component, event, helper) {
