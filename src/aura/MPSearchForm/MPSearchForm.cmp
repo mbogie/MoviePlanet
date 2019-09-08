@@ -21,20 +21,24 @@
     <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
     <aura:attribute access="private" name="recordError" type="String"/>
     <aura:attribute name="newMovie" type="Movie__c" default="{}"/>
+    <aura:attribute name="newMovieId" type="String" default=""/>
     <aura:attribute name="disabledModal" type="Boolean" default="false"/>
     <aura:attribute name="disabledButton" type="Boolean" default="true"/>
+    <aura:attribute name="reset" type="Boolean" default="true"/>
+    <aura:attribute name="disabledTitle" type="Boolean" default="false"/>
     <aura:attribute name="step" type="Integer" default="1"/>
+    <aura:attribute name="fields" type="String[]" default="['Name','Homepage__c','Genres__c','IsVisible__c']"/>
     <aura:attribute name="Spinner" type="boolean" default="false"/>
 
     <aura:if isTrue="{!v.Spinner}">
-<!--            <lightning:spinner variant="brand" alternativeText="Loading" size="large" />-->
+        <!--            <lightning:spinner variant="brand" alternativeText="Loading" size="large" />-->
     </aura:if>
 
     <div aura:id="section" class="{!if(v.displayedSection,'slds-show','slds-hide')}">
         <lightning:card title="" class="card">
             <lightning:layout multipleRows="true">
-                <lightning:layoutItem class="homeButton" >
-                        <button class="customButton" onclick="{!c.goHome}"> Home</button>
+                <lightning:layoutItem class="homeButton">
+                    <button class="customButton" onclick="{!c.goHome}"> Home</button>
                 </lightning:layoutItem>
                 <lightning:layoutItem alignmentBump="left">
                     <button class="rightButtons" onclick="{!c.openModel}">Add New Movie</button>
@@ -42,12 +46,12 @@
                 </lightning:layoutItem>
             </lightning:layout>
             <lightning:layout horizontalAlign="center" verticalAlign="center">
-                    <lightning:input class="input" name="query" label="" value="{!v.query}"/>
-                    <lightning:select aura:id="searchTypes" name="selectType" label="" class="select">
-                        <aura:iteration items="{!v.sType}" var="sType">
-                            <option text="{!sType}" value="{!sType}"/>
-                        </aura:iteration>
-                    </lightning:select>
+                <lightning:input class="input" name="query" label="" value="{!v.query}"/>
+                <lightning:select aura:id="searchTypes" name="selectType" label="" class="select">
+                    <aura:iteration items="{!v.sType}" var="sType">
+                        <option text="{!sType}" value="{!sType}"/>
+                    </aura:iteration>
+                </lightning:select>
                 <button class="customButton" style="margin-top : 18px" onclick="{!c.onFormSubmit}"> Search</button>
             </lightning:layout>
         </lightning:card>
@@ -55,7 +59,7 @@
 
 
     <div aura:id="section" class="{!if(v.isOpen,'slds-show','slds-hide')}">
-    <!--###### MODAL BOX Start######-->
+        <!--###### MODAL BOX Start######-->
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
                  aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
@@ -79,37 +83,83 @@
                     <aura:if isTrue="{!v.step == 4}">
                         <p align="center" style="color:white">New Movie added.</p>
                     </aura:if>
-<!--                    <lightning:progressIndicator currentStep="{!v.step}" type="base" hasError="false" variant="base">
-                        <lightning:progressStep label="Check for Exist" value="1"/>
-                        <lightning:progressStep label="Save New Movie" value="2"/>
-                        <lightning:progressStep label="Add Poster" value="3"/>
-                        <lightning:progressStep label="Close" value="4"/>
-                    </lightning:progressIndicator>-->
+                    <!--                    <lightning:progressIndicator currentStep="{!v.step}" type="base" hasError="false" variant="base">
+                                            <lightning:progressStep label="Check for Exist" value="1"/>
+                                            <lightning:progressStep label="Save New Movie" value="2"/>
+                                            <lightning:progressStep label="Add Poster" value="3"/>
+                                            <lightning:progressStep label="Close" value="4"/>
+                                        </lightning:progressIndicator>-->
                 </header>
                 <!--###### MODAL BOX BODY Part Start######-->
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="background-color : #322A29">
-                    <force:recordData aura:id="service"
-                                      fields="Name"
-                                      targetError="{!v.recordError}"
-                                      targetFields="{!v.newMovie}"
-                    />
-                    <lightning:input name="title" label="Title" value="{!v.newMovie.Name}" disabled="{!not(v.disabledButton)}"/>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"
+                     style="background-color : #322A29">
+                    <!--     <force:recordData aura:id="service"
+                                           fields="Name,Genres__c"
+                                           targetError="{!v.recordError}"
+                                           targetFields="{!v.newMovie}"
+                         />-->
+                    <!--                    <lightning:inputField value="{!v.newMovie.Name}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:input name="title" label="Title" value="{!v.newMovie.Budget__c}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:inputField value="{!v.newMovie.Genres__c}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:input name="title" label="Title" value="{!v.newMovie.Homepage__c}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:input name="title" label="Title" value="{!v.newMovie.Production_companies__c}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:input name="title" label="Title" value="{!v.newMovie.Release_date__c}" disabled="{!v.disabledTitle}"/>-->
+                    <!--                    <lightning:input name="title" label="Title" value="{!v.newMovie.Overview__c}" disabled="{!v.disabledTitle}"/>-->
 
+                    <aura:if isTrue="{!v.reset}">
+                        <aura:if isTrue="{!or(equals(v.step, 1), equals(v.step, 2))}">
+                            <lightning:recordEditForm
+                                    aura:id="movieForm"
+                                    onsuccess="{!c.handleSuccess}"
+                                    objectApiName="Movie__c">
+                                <lightning:messages/>
+                                <lightning:inputField fieldName="Name" disabled="{!v.disabledTitle}"
+                                                      value="{!v.newMovie.Name}"/>
+                                <aura:if isTrue="{!equals(v.step, 2)}">
+                                    <lightning:inputField fieldName="Budget__c" value="{!v.newMovie.Budget__c}"/>
+                                    <lightning:inputField fieldName="Genres__c" value="{!v.newMovie.Genres__c}"/>
+                                    <lightning:inputField fieldName="Homepage__c" value="{!v.newMovie.Homepage__c}"/>
+                                    <lightning:inputField fieldName="Production_companies__c"
+                                                          value="{!v.newMovie.Production_companies__c}"/>
+                                    <lightning:inputField fieldName="Release_date__c"
+                                                          value="{!v.newMovie.Release_date__c}"/>
+                                    <lightning:inputField fieldName="Overview__c" value="{!v.newMovie.Overview__c}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!equals(v.step, 3)}">
+                                <c:MPDragDrop recordId = "{!v.newMovieId}"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.step == 4}">
+                                    <p align="center" style="color:white">New Movie added.</p>
+                                </aura:if>
+                            </lightning:recordEditForm>
+                        </aura:if>
+                    </aura:if>
                 </div>
                 <footer class="slds-modal__footer" style="background-color : #322A29">
                     <lightning:button variant="neutral"
                                       label="Close"
                                       onclick="{! c.onCancel }" class="customButton"/>
                     <aura:if isTrue="{!equals(v.step, 1)}">
-                    <lightning:button variant="brand"
-                                      label="Check"
-                                      onclick="{!c.checkMovie}" class="customButton"/>
+                        <lightning:button variant="brand"
+                                          label="Check"
+                                          onclick="{!c.checkMovie}" class="customButton"/>
                     </aura:if>
-                    <aura:if isTrue="{!notequals(v.step, 4)}">
-                    <lightning:button variant="brand"
-                                      label="Next"
-                                      disabled="{!v.disabledButton}"
-                                      onclick="{!c.nextStep}" class="{!if(equals(v.disabledButton, true),'customButtonDisabled','customButton')}"/>
+                    <aura:if isTrue="{!equals(v.step, 2)}">
+                        <lightning:button variant="brand"
+                                          label="Save"
+                                          onclick="{!c.saveMovie}" class="customButton"/>
+                    </aura:if>
+                    <aura:if isTrue="{!equals(v.step, 3)}">
+                        <lightning:button variant="brand"
+                                          label="Add"
+                                          onclick="{!c.addImage}" class="customButton"/>
+                    </aura:if>
+                    <aura:if isTrue="{!equals(v.step, 1)}">
+                        <lightning:button variant="brand"
+                                          label="{!if(equals(v.step, 2),'Save','Next')}"
+                                          disabled="{!v.disabledButton}"
+                                          onclick="{!c.nextStep}"
+                                          class="{!if(equals(v.disabledButton, true),'customButtonDisabled','customButton')}"/>
                     </aura:if>
                 </footer>
             </div>

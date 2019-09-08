@@ -1,6 +1,6 @@
 ({
     onInit: function (component, event, helper) {
-        component.find("service").getNewRecord(
+      /*  component.find("service").getNewRecord(
             "Movie__c", // sObject type (entityAPIName)
             null,      // recordTypeId
             false,     // skip cache?
@@ -13,6 +13,6 @@
                     let test = component.get("v.newMovie");
                 }
             })
-        );
+        );*/
     },
 })

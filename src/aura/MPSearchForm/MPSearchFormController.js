@@ -73,32 +73,82 @@
 
     nextStep: function (component, event, helper) {
         let step = component.get("v.step");
+        if(step == 1){
+            component.set("v.disabledTitle", true);
+            step++;
+            component.set("v.step", step);
+        }
+    },
+
+    saveMovie: function (component, event, helper) {
+        let step = component.get("v.step");
+        let title = component.get("v.newMovie").Name;
+        console.log(title + ' <----');
+//        component.find("movieForm").submit();
         step++;
         component.set("v.step", step);
-        console.log('step__> ' + step)
+        let action = component.get("c.getMovieId");
+                            action.setParams({
+                                movie: component.get("v.newMovie"),
+                            });
+                            action.setCallback(this, function (response) {
+                                if (component.isValid() && response.getState() === 'SUCCESS') {
+                                    let movieId = response.getReturnValue();
+                                    console.log(response.getReturnValue());
+                                    component.set("v.newMovieId", movieId);
+                                } else {
+                                    let toastEvent = $A.get("e.force:showToast");
+                                     toastEvent.setParams({
+                                     "type": "error",
+                                        "message": response.getError()[0].message
+                                        });
+                                        toastEvent.fire();
+                                    }
+                            });
+                            $A.enqueueAction(action);
     },
+
+    addImage: function (component, event, helper) {
+        let step = component.get("v.step");
+        step++;
+        component.set("v.step", step);
+    },
+
+    handleSuccess : function(component, event, helper) {
+            var payload = event.getParams().response;
+            console.log(payload.id);
+        },
 
     onCancel: function (component, event, helper) {
         component.set("v.isOpen", false);
-        component.set("v.disabledButton", false);
+        component.set("v.disabledButton", true);
+        component.set("v.disabledTitle", false);
+        component.set("v.newMovie", {});
+        component.set("v.reset", false);
+        component.set("v.reset", true);
+        component.set("v.step", 1);
         helper.onInit(component, event, helper);
     },
 
     checkMovie : function (component, event, helper) {
-        let movieName = component.get("v.newMovie.Name");
-        console.log('name--> ' + movieName);
+        let movie = component.get("v.newMovie");
+        let movieName = movie.Name;
+        console.log('name--> ' + movie.Genres__c);
         if(movieName) {
-            let checkMovie = component.get("c.checkMovie");
+            console.log('1');
+            let checkMovie = component.get("c.checkMovieInside");
+            console.log('2');
             checkMovie.setParams({
                 movie: movieName
             });
+            console.log('3');
             checkMovie.setCallback(this, function (response) {
                 if (component.isValid() && response.getState() === 'SUCCESS') {
                     console.log(response.getReturnValue());
                     let toastEvent = $A.get("e.force:showToast");
                     toastEvent.setParams({
                         "type": "success",
-                        "message": "Movie with title: '" + response.getReturnValue() + "' can be created"
+                        "message": response.getReturnValue()
                     });
                     toastEvent.fire();
                     component.set("v.disabledButton", false);
@@ -109,6 +159,7 @@
                         "message": response.getError()[0].message
                     });
                     toastEvent.fire();
+                    component.set("v.disabledButton", true);
                     //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
                 }
             });

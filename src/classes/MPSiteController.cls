@@ -181,14 +181,34 @@ public with sharing class MPSiteController {
     }
 
     @AuraEnabled
-    public static String checkMovie(String movie) {
+    public static String getMovieId(Movie__c movie) {
+        System.debug('title - ' + movie);
+        Database.SaveResult saveResult = Database.insert(movie);
+        if(saveResult.isSuccess()){
+            return saveResult.id;
+        } else {
+            throw new AuraHandledException('The Movie can\'t be created');
+        }
+//        List<Movie__c> newMovie = [SELECT Id FROM Movie__c WHERE Name LIKE :title];
+//        System.debug(newMovie);
+//        if (newMovie.isEmpty()) {
+//            throw new AuraHandledException('The Movie can\'t be created');
+//        } else {
+//            return newMovie[0].Id;
+//        }
+ //       return null;
+    }
+
+    @AuraEnabled
+    public static String checkMovieInside(String movie) {
+        String title = movie;
         System.debug('title ' + movie);
         if(String.isNotBlank(movie)) {
-            List<Movie__c> oldMovies = [SELECT Name, Budget__c, Release_date__c FROM Movie__c WHERE Name LIKE :movie];
+            List<Movie__c> oldMovies = [SELECT Name, Budget__c, Release_date__c FROM Movie__c WHERE Name LIKE :title];
             if (!oldMovies.isEmpty()) {
-                throw new AuraHandledException('The Movie with title ' + movie + ' already exists');
+                throw new AuraHandledException('The Movie with title ' + title + ' already exists');
             } else {
-                return movie;
+                return 'Movie with title: ' + title + ' can be created';
             }
         } else {
             return null;
@@ -219,5 +239,37 @@ public with sharing class MPSiteController {
     public class BFlist {
         @AuraEnabled public List<MPMovieWrapper> favorite;
         @AuraEnabled public List<MPMovieWrapper> blacklist;
+    }
+
+    @AuraEnabled
+    public static Attachment getProfilePicture(Id parentId) {
+
+        // Attachment permissions are set in parent object (Contact)
+        if (!Schema.sObjectType.Contact.isAccessible()) {
+            throw new System.NoAccessException();
+            //return null;
+        }
+
+        return [SELECT Id, Name, LastModifiedDate, ContentType FROM Attachment
+        WHERE parentid=:ParentId AND ContentType IN ('image/png', 'image/jpeg', 'image/gif')
+        ORDER BY LastModifiedDate DESC LIMIT 1];
+    }
+
+    @AuraEnabled
+    public static Id saveAttachment(Id parentId, String fileName, String base64Data, String contentType) {
+
+        // Edit permission on parent object (Contact) is required to add attachments
+        if (!Schema.sObjectType.Contact.isUpdateable()) {
+            throw new System.NoAccessException();
+          //  return null;
+        }
+
+        Attachment attachment = new Attachment();
+        attachment.parentId = parentId;
+        attachment.body = EncodingUtil.base64Decode(base64Data);
+        attachment.name = fileName;
+        attachment.contentType = contentType;
+        insert attachment;
+        return attachment.id;
     }
 }
