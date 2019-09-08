@@ -22,8 +22,8 @@
     <aura:attribute access="private" name="recordError" type="String"/>
     <aura:attribute name="newMovie" type="Movie__c" default="{}"/>
     <aura:attribute name="disabledModal" type="Boolean" default="false"/>
-
-
+    <aura:attribute name="disabledButton" type="Boolean" default="true"/>
+    <aura:attribute name="step" type="Integer" default="1"/>
     <aura:attribute name="Spinner" type="boolean" default="false"/>
 
     <aura:if isTrue="{!v.Spinner}">
@@ -52,9 +52,9 @@
             </lightning:layout>
         </lightning:card>
     </div>
-<!--    <aura:if isTrue="{!v.isOpen}">-->
-    <div aura:id="section" class="{!if(v.isOpen,'slds-show','slds-hide')}">
 
+
+    <div aura:id="section" class="{!if(v.isOpen,'slds-show','slds-hide')}">
     <!--###### MODAL BOX Start######-->
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
                  aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
@@ -67,35 +67,53 @@
                                           variant="bare-inverse"
                                           class="slds-modal__close"/>
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Movie</h2>
-                    <lightning:progressIndicator currentStep="3" type="base" hasError="false" variant="base">
+                    <aura:if isTrue="{!v.step == 1}">
+                        <p align="center" style="color:white">Check if the new Movie already exists.</p>
+                    </aura:if>
+                    <aura:if isTrue="{!v.step == 2}">
+                        <p align="center" style="color:white">Fill the field of new Movie (optional).</p>
+                    </aura:if>
+                    <aura:if isTrue="{!v.step == 3}">
+                        <p align="center" style="color:white">Add poster photo (optional).</p>
+                    </aura:if>
+                    <aura:if isTrue="{!v.step == 4}">
+                        <p align="center" style="color:white">New Movie added.</p>
+                    </aura:if>
+<!--                    <lightning:progressIndicator currentStep="{!v.step}" type="base" hasError="false" variant="base">
                         <lightning:progressStep label="Check for Exist" value="1"/>
                         <lightning:progressStep label="Save New Movie" value="2"/>
                         <lightning:progressStep label="Add Poster" value="3"/>
                         <lightning:progressStep label="Close" value="4"/>
-                    </lightning:progressIndicator>
+                    </lightning:progressIndicator>-->
                 </header>
                 <!--###### MODAL BOX BODY Part Start######-->
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="background-color : #322A29">
-
                     <force:recordData aura:id="service"
                                       fields="Name"
                                       targetError="{!v.recordError}"
                                       targetFields="{!v.newMovie}"
                     />
+                    <lightning:input name="title" label="Title" value="{!v.newMovie.Name}" disabled="{!not(v.disabledButton)}"/>
 
-                    <lightning:input name="title" label="Title" value="{!v.newMovie.Name}"/>
                 </div>
                 <footer class="slds-modal__footer" style="background-color : #322A29">
                     <lightning:button variant="neutral"
-                                      label="Check"
-                                      onclick="{! c.closeModel }" disabled="true" class="customButton"/>
+                                      label="Close"
+                                      onclick="{! c.onCancel }" class="customButton"/>
+                    <aura:if isTrue="{!equals(v.step, 1)}">
                     <lightning:button variant="brand"
-                                      label="Next Step"
-                                      onclick="{! c.likenClose }" class="rightButtons"/>
+                                      label="Check"
+                                      onclick="{!c.checkMovie}" class="customButton"/>
+                    </aura:if>
+                    <aura:if isTrue="{!notequals(v.step, 4)}">
+                    <lightning:button variant="brand"
+                                      label="Next"
+                                      disabled="{!v.disabledButton}"
+                                      onclick="{!c.nextStep}" class="{!if(equals(v.disabledButton, true),'customButtonDisabled','customButton')}"/>
+                    </aura:if>
                 </footer>
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
     </div>
-<!--    </aura:if>-->
 </aura:component>

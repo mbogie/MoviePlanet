@@ -1,17 +1,17 @@
 ({
-   doInit: function(component, event, helper) {
-          helper.onInit(component, event,helper);
-   },
+    doInit: function (component, event, helper) {
+        helper.onInit(component, event, helper);
+    },
 
-   showSpinner: function(component, event, helper) {
-       // make Spinner attribute true for display loading spinner
+    showSpinner: function (component, event, helper) {
+        // make Spinner attribute true for display loading spinner
         component.set("v.Spinner", true);
-   },
+    },
 
- // this function automatic call by aura:doneWaiting event
-    hideSpinner : function(component,event,helper){
-     // make Spinner attribute to false for hide loading spinner
-       component.set("v.Spinner", false);
+    // this function automatic call by aura:doneWaiting event
+    hideSpinner: function (component, event, helper) {
+        // make Spinner attribute to false for hide loading spinner
+        component.set("v.Spinner", false);
     },
 
     onFormSubmit: function (component, event, helper) {
@@ -71,48 +71,64 @@
         component.set("v.isOpen", true);
     },
 
-    onCancel: function (component, event, helper) {
-        event.preventDefault();
-        component.set("v.isOpen", false);
-        helper.onInit(component, event,helper);
+    nextStep: function (component, event, helper) {
+        let step = component.get("v.step");
+        step++;
+        component.set("v.step", step);
+        console.log('step__> ' + step)
+    },
 
+    onCancel: function (component, event, helper) {
+        component.set("v.isOpen", false);
+        component.set("v.disabledButton", false);
+        helper.onInit(component, event, helper);
     },
-handleCreateLoad: function (cmp, event, helper) {
-        let nameFieldValue = cmp.find("nameField").set("v.value", "My New Account");
+
+    checkMovie : function (component, event, helper) {
+        let movieName = component.get("v.newMovie.Name");
+        console.log('name--> ' + movieName);
+        if(movieName) {
+            let checkMovie = component.get("c.checkMovie");
+            checkMovie.setParams({
+                movie: movieName
+            });
+            checkMovie.setCallback(this, function (response) {
+                if (component.isValid() && response.getState() === 'SUCCESS') {
+                    console.log(response.getReturnValue());
+                    let toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "type": "success",
+                        "message": "Movie with title: '" + response.getReturnValue() + "' can be created"
+                    });
+                    toastEvent.fire();
+                    component.set("v.disabledButton", false);
+                } else {
+                    let toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "type": "error",
+                        "message": response.getError()[0].message
+                    });
+                    toastEvent.fire();
+                    //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
+                }
+            });
+             $A.enqueueAction(checkMovie);
+        } else {
+            let toastEvent = $A.get("e.force:showToast");
+            toastEvent.setParams({
+                "type": "info",
+                "message": "Fill the Title"
+            });
+            toastEvent.fire();
+        }
     },
+
     onSubmit: function (component, event, helper) {
         component.find("nameField").set("v.value", "My New Account");
         component.set("v.val", 'aaa');
         event.preventDefault();
         const fields = event.getParam('fields');
         let movieJson = JSON.stringify(fields);
-        let addMovie = component.get("c.addMovie");
-        addMovie.setParams({
-            movie: movieJson
-        });
-       /* addMovie.setCallback(this, function (response) {
-            if (component.isValid() && response.getState() === 'SUCCESS') {
-                component.set("v.movie", response.getReturnValue());
-                console.log(response.getReturnValue());
-                let toastEvent = $A.get("e.force:showToast");
-                toastEvent.setParams({
-                    "type": "success",
-                    "message": " New Movie Added"
-                });
-                toastEvent.fire();
-                component.set("v.isOpen", false);
-
-            } else {
-                let toastEvent = $A.get("e.force:showToast");
-                toastEvent.setParams({
-                    "type": "error",
-                    "message": response.getError()[0].message
-                });
-                toastEvent.fire();
-                //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
-            }
-        });
-        $A.enqueueAction(addMovie);*/
     },
 
     blacklist: function (component, event, helper) {

@@ -4,9 +4,9 @@
     <option name="connections">
       <list>
         <IlluminatedCloudConnection>
-          <option name="connectionName" value="MoviePlanet" />
+          <option name="connectionName" value="Movie Planet" />
           <option name="defaultModuleName" value="MoviePlanet" />
-          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/MoviePlanet/OfflineSymbolTable.zip" />
+          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/Movie_Planet/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>
       </list>
     </option>

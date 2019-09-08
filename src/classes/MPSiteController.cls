@@ -181,6 +181,21 @@ public with sharing class MPSiteController {
     }
 
     @AuraEnabled
+    public static String checkMovie(String movie) {
+        System.debug('title ' + movie);
+        if(String.isNotBlank(movie)) {
+            List<Movie__c> oldMovies = [SELECT Name, Budget__c, Release_date__c FROM Movie__c WHERE Name LIKE :movie];
+            if (!oldMovies.isEmpty()) {
+                throw new AuraHandledException('The Movie with title ' + movie + ' already exists');
+            } else {
+                return movie;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @AuraEnabled
     public static BFlist getBF() {
         List<Favorited_And_Blacklisted__c> bfList = [SELECT MovieId__c, Type__c, User__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId()];
         if (bfList.isEmpty()) return null;
