@@ -3,6 +3,8 @@
 
     <aura:attribute name="movie" type="Object"/>
     <aura:attribute name="selectedTabId" type="String"/>
+    <aura:attribute name="count" type="Double" default="0"/>
+    <aura:attribute name="sum" type="Integer" default="0"/>
     <aura:attribute name="actors" type="Object[]"/>
     <aura:attribute name="images" type="Object[]"/>
     <aura:attribute name="videos" type="Object[]"/>
@@ -10,6 +12,7 @@
 
     <aura:handler event="c:MPSelectedMovieEvent" action="{!c.MPSelectedMovieEvent}"/>
     <aura:handler event="c:MPHideMovieDetailEvent" action="{!c.MPHideMovieDetailEvent}"/>
+    <aura:handler event="c:MPPassAverageReviews" action="{!c.MPPassAverageReviews}"/>
     <aura:registerEvent name="goHome" type="c:MPSetHomePage"/>
     <aura:registerEvent name="MPShowSearchComponentEvent" type="c:MPShowSearchComponentEvent"/>
     <aura:registerEvent name="hideReview" type="c:MPHideReview"/>
@@ -45,7 +48,7 @@
             <lightning:layout multipleRows="true">
                 <aura:if isTrue="{!equals(v.movie.source, 'internal')}">
                     <lightning:layoutItem class="poster">
-                        <img src="{!v.movie.poster_path}"/>
+                        <img src="{!empty(v.movie.poster_path) ? $Resource.MP_Default :  v.movie.poster_path}"/>
                     </lightning:layoutItem>
                     <aura:set attribute="else">
                         <lightning:layoutItem class="poster">
@@ -54,7 +57,8 @@
                     </aura:set>
                 </aura:if>
                 <lightning:layoutItem class="details" alignmentBump="left">
-                    <a href="{!v.movie.homepage}">{!v.movie.homepage}</a><br/>
+                    <p style="font-size:20px">Reviews Count: {!v.sum} ({!v.count})</p><br/>
+                    <a href="{!v.movie.homepage}" target="_blank">{!v.movie.homepage}</a><br/>
                     <p>Release Date : {!v.movie.release_date}</p>
                     <p>Budget:
                         <lightning:formattedNumber

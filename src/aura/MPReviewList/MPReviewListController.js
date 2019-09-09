@@ -14,12 +14,22 @@
                      if ( component.isValid() && response.getState() === 'SUCCESS' ) {
                         component.set("v.MovieReviews", response.getReturnValue());
                         console.log(response.getReturnValue());
+                        console.log('ilosc -> ' + response.getReturnValue().length);
+                        let sum = 0;
+                        for (var i = 0; i < response.getReturnValue().length; i++) {
+                        sum += response.getReturnValue()[i].Rating__c;
+                        }
+                        console.log('suma -> ' + sum);
+                        let passReview = $A.get("e.c:MPPassAverageReviews");
+                                passReview.setParams({
+                                    "count": response.getReturnValue().length,
+                                    "sum": sum
+                                });
+                                passReview.fire();
                         } else {
                                              //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
                                }
                                });
                      $A.enqueueAction(getReviews);
          },
-
-
 })

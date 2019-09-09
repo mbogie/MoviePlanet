@@ -34,26 +34,40 @@ public with sharing class MPSiteController {
             return movie;
         } else {
             Movie__c internalMovie = [SELECT Budget__c, Genres__c, Homepage__c, Id, Name, Overview__c, Poster_path__c, Production_companies__c, Release_date__c, Runtime__c FROM Movie__c WHERE Id = :movieId];
+            List<Attachment> photo = [SELECT Id, Name FROM Attachment where parentid = :movieId];
+            System.debug(internalMovie);
             MPMovieWrapper movie = new MPMovieWrapper();
-            movie.budget = internalMovie.Budget__c;
-            movie.genres = genresString(internalMovie.Genres__c.split(';'));
-            movie.homepage = internalMovie.Homepage__c;
+            if(String.isNotBlank(internalMovie.Budget__c)) movie.budget = internalMovie.Budget__c;
+            if(String.isNotBlank(internalMovie.Genres__c)) movie.genres = genresString(internalMovie.Genres__c.split(';'));
+            if(String.isNotBlank(internalMovie.Homepage__c)) movie.homepage = internalMovie.Homepage__c;
             movie.id = internalMovie.Id;
-            movie.overview = internalMovie.Overview__c;
-            movie.poster_path = internalMovie.Poster_path__c;
-            movie.production_companies = companiesString(internalMovie.Production_companies__c.split(','));
-            movie.release_date = internalMovie.Release_date__c;
-            movie.runtime = internalMovie.Runtime__c;
+            if(String.isNotBlank(internalMovie.Overview__c)) movie.overview = internalMovie.Overview__c;
+            if(!photo.isEmpty()) movie.poster_path ='/servlet/servlet.FileDownload?file='+photo.get(0).Id;
+            if(String.isNotBlank(internalMovie.Production_companies__c)) movie.production_companies = companiesString(internalMovie.Production_companies__c.split(','));
+            if(internalMovie.Release_date__c != null) movie.release_date = internalMovie.Release_date__c;
+            if(internalMovie.Runtime__c != null) movie.runtime = internalMovie.Runtime__c;
             movie.title = internalMovie.Name;
             movie.source = 'internal';
+          //  System.debug(movie.poster_path + ' - --- ' + photo.Id);
+            System.debug(movie);
+            List<Favorited_And_Blacklisted__c> oldList = [Select MovieId__c, Type__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId()];
+            for (Favorited_And_Blacklisted__c fb : oldList) {
+                if (movie.id == fb.MovieId__c) {
+                    movie.fbtype = fb.Type__c;
+                }
+            }
             return movie;
         }
 
     }
     @AuraEnabled
     public static List<MPCastAndCrewWrapper.Cast_Z> getMovieCast(String movieId) {
-        List<MPCastAndCrewWrapper.Cast_Z> castList = MPRestController.getMovieCast(movieId);
-        return castList;
+        try {
+            List<MPCastAndCrewWrapper.Cast_Z> castList = MPRestController.getMovieCast(movieId);
+            return castList;
+        }catch(Exception e){
+            return new List<MPCastAndCrewWrapper.Cast_Z>();
+        }
     }
     @AuraEnabled
     public static List<MPMovieImagesWrapper.Backdrops> getMovieImages(String movieId) {
@@ -113,6 +127,7 @@ public with sharing class MPSiteController {
 //public static String query = 'nicholson';
     @AuraEnabled
     public static MPMovieSearchWrapper searchMovies(String query, Integer page) {
+        System.debug('query --> ' + query);
         MPMovieSearchWrapper movies = MPRestController.searchMovies(query, page);
         List<Favorited_And_Blacklisted__c> bfList = [SELECT MovieId__c, Type__c, User__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId()];
         for (MPMovieSearchWrapper.Movies w : movies.results) {
@@ -121,8 +136,10 @@ public with sharing class MPSiteController {
                 if (w.id == item.MovieId__c) w.fbtype = item.Type__c;
             }
         }
-        if (page == movies.total_pages) {
-            String stringQuery = 'SELECT Budget__c, Genres__c, Homepage__c, Id, Name, Overview__c, Poster_path__c, Production_companies__c, Release_date__c, Runtime__c FROM Movie__c WHERE Name LIKE \'%' + query + '%\'';
+        System.debug(page + ' <----> ' + movies.total_pages);
+        if (page == movies.total_pages || movies.total_pages == 0) {
+            System.debug('internal search');
+            String stringQuery = 'SELECT Budget__c, Genres__c, Homepage__c, Id, Name, Overview__c, Poster_path__c, Production_companies__c, Release_date__c, Runtime__c FROM Movie__c WHERE IsVisible__c = true AND Name LIKE \'%' + query + '%\'';
             List<Movie__c> internalMovies = Database.query(stringQuery);
             if (!internalMovies.isEmpty()) {
                 for (Movie__c m : internalMovies) {
@@ -130,6 +147,8 @@ public with sharing class MPSiteController {
                     for (Favorited_And_Blacklisted__c item : bfList) {
                         if (movie.id == item.MovieId__c) movie.fbtype = item.Type__c;
                     }
+                    List<Attachment> photo = [SELECT Id, Name FROM Attachment where parentid = :m.Id];
+                    if(!photo.isEmpty()) movie.poster_path ='/servlet/servlet.FileDownload?file='+photo.get(0).Id;
                     movies.results.add(movie);
                 }
             }
@@ -152,7 +171,12 @@ public with sharing class MPSiteController {
     @AuraEnabled
     public static MPMovieWrapper addToBFList(String movieId, String fbtype) {
         String oldType = '';
-        MPMovieWrapper movie = MPRestController.getMovieById(movieId);
+        System.debug(fbtype);
+       /* if(movieId.length()<10) {
+            MPMovieWrapper movie = MPRestController.getMovieById(movieId);
+        } else {
+            Movie__c internalMovie = [SELECT Id, ]
+        }*/
         List<Favorited_And_Blacklisted__c> oldList = [Select Id,Type__c FROM Favorited_And_Blacklisted__c WHERE User__c = :UserInfo.getUserId() AND MovieId__c = :movieId];
         if (!oldList.isEmpty()) {
             oldType = oldList.get(0).Type__c;
@@ -164,9 +188,9 @@ public with sharing class MPSiteController {
             newObject.User__c = UserInfo.getUserId();
             newObject.MovieId__c = movieId;
             insert newObject;
-            movie.fbtype = fbtype;
+       //     movie.fbtype = fbtype;
         }
-        return movie;
+        return null;
     }
 
     @AuraEnabled
@@ -223,11 +247,26 @@ public with sharing class MPSiteController {
         List<MPMovieWrapper> favorite = new List<MPMovieWrapper>();
         List<MPMovieWrapper> blacklist = new List<MPMovieWrapper>();
         for (Favorited_And_Blacklisted__c item : bfList) {
-            MPMovieWrapper movie = MPRestController.getMovieById(item.MovieId__c);
-            movie.source = 'external';
-            movie.fbtype = item.Type__c;
-            if (item.Type__c == 'Favorite') favorite.add(movie);
-            if (item.Type__c == 'Black List') blacklist.add(movie);
+            if(item.MovieId__c.length()<10) {
+                MPMovieWrapper movie = MPRestController.getMovieById(item.MovieId__c);
+                movie.source = 'external';
+                movie.fbtype = item.Type__c;
+                if (item.Type__c == 'Favorite') favorite.add(movie);
+                if (item.Type__c == 'Black List') blacklist.add(movie);
+            } else {
+                Movie__c internalMovie = [SELECT Budget__c, Genres__c, Homepage__c, Id, Name, Overview__c, Poster_path__c, Production_companies__c, Release_date__c, Runtime__c FROM Movie__c WHERE Id = :item.MovieId__c];
+                List<Attachment> photo = [SELECT Id, Name FROM Attachment where parentid = :item.MovieId__c];
+                System.debug(internalMovie);
+                MPMovieWrapper movie = new MPMovieWrapper();
+                movie.id = internalMovie.Id;
+                if(!photo.isEmpty()) movie.poster_path ='/servlet/servlet.FileDownload?file='+photo.get(0).Id;
+                movie.title = internalMovie.Name;
+                movie.source = 'internal';
+                //  System.debug(movie.poster_path + ' - --- ' + photo.Id);
+                movie.fbtype = item.Type__c;
+                if (item.Type__c == 'Favorite') favorite.add(movie);
+                if (item.Type__c == 'Black List') blacklist.add(movie);
+            }
         }
         bf.blacklist = blacklist;
         bf.favorite = favorite;
@@ -257,7 +296,7 @@ public with sharing class MPSiteController {
 
     @AuraEnabled
     public static Id saveAttachment(Id parentId, String fileName, String base64Data, String contentType) {
-
+        System.debug('zapisuje');
         // Edit permission on parent object (Contact) is required to add attachments
         if (!Schema.sObjectType.Contact.isUpdateable()) {
             throw new System.NoAccessException();

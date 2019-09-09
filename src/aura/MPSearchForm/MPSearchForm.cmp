@@ -24,11 +24,20 @@
     <aura:attribute name="newMovieId" type="String" default=""/>
     <aura:attribute name="disabledModal" type="Boolean" default="false"/>
     <aura:attribute name="disabledButton" type="Boolean" default="true"/>
+    <aura:attribute name="disabledAddButton" type="Boolean" default="false"/>
     <aura:attribute name="reset" type="Boolean" default="true"/>
     <aura:attribute name="disabledTitle" type="Boolean" default="false"/>
     <aura:attribute name="step" type="Integer" default="1"/>
     <aura:attribute name="fields" type="String[]" default="['Name','Homepage__c','Genres__c','IsVisible__c']"/>
     <aura:attribute name="Spinner" type="boolean" default="false"/>
+
+
+    <aura:attribute name="pictureSrc" type="String"
+                    default="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+
+    <aura:attribute name="message" type="String" default="Drag profile picture here"/>
+
+<!--    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />-->
 
     <aura:if isTrue="{!v.Spinner}">
         <!--            <lightning:spinner variant="brand" alternativeText="Loading" size="large" />-->
@@ -80,9 +89,6 @@
                     <aura:if isTrue="{!v.step == 3}">
                         <p align="center" style="color:white">Add poster photo (optional).</p>
                     </aura:if>
-                    <aura:if isTrue="{!v.step == 4}">
-                        <p align="center" style="color:white">New Movie added.</p>
-                    </aura:if>
                     <!--                    <lightning:progressIndicator currentStep="{!v.step}" type="base" hasError="false" variant="base">
                                             <lightning:progressStep label="Check for Exist" value="1"/>
                                             <lightning:progressStep label="Save New Movie" value="2"/>
@@ -125,14 +131,19 @@
                                                           value="{!v.newMovie.Release_date__c}"/>
                                     <lightning:inputField fieldName="Overview__c" value="{!v.newMovie.Overview__c}"/>
                                 </aura:if>
-                                <aura:if isTrue="{!equals(v.step, 3)}">
-                                <c:MPDragDrop recordId = "{!v.newMovieId}"/>
-                                </aura:if>
-                                <aura:if isTrue="{!v.step == 4}">
-                                    <p align="center" style="color:white">New Movie added.</p>
-                                </aura:if>
                             </lightning:recordEditForm>
                         </aura:if>
+                    </aura:if>
+                    <aura:if isTrue="{!equals(v.step, 3)}">
+                        <div align="center">
+                        <div ondragover="{!c.onDragOver}" ondrop="{!c.onDrop}">
+                            <img src="{!v.pictureSrc}"/>
+                            <p style="color: white">{!v.message}</p>
+                        </div>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.step == 4}">
+                        <p align="center" style="color:white;font-size:20px">Thank You for add new Movie. Now we verify it and add to search.</p>
                     </aura:if>
                 </div>
                 <footer class="slds-modal__footer" style="background-color : #322A29">
@@ -152,7 +163,9 @@
                     <aura:if isTrue="{!equals(v.step, 3)}">
                         <lightning:button variant="brand"
                                           label="Add"
-                                          onclick="{!c.addImage}" class="customButton"/>
+                                          disabled="{!v.disabledAddButton}"
+                                          onclick="{!c.addImage}"
+                                          class="{!if(equals(v.disabledAddButton, true),'customButtonDisabled','customButton')}"/>
                     </aura:if>
                     <aura:if isTrue="{!equals(v.step, 1)}">
                         <lightning:button variant="brand"

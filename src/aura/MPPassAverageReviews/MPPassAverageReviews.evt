@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="MPPassAverageReviews">
+    <aura:attribute name="count" type="Integer"/>
+    <aura:attribute name="sum" type="Integer"/>
+</aura:event>

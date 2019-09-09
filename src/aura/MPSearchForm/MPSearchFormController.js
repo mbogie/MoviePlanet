@@ -81,8 +81,9 @@
     },
 
     saveMovie: function (component, event, helper) {
-        let step = component.get("v.step");
-        let title = component.get("v.newMovie").Name;
+    let step = component.get("v.step");
+
+              let title = component.get("v.newMovie").Name;
         console.log(title + ' <----');
 //        component.find("movieForm").submit();
         step++;
@@ -127,6 +128,7 @@
         component.set("v.reset", false);
         component.set("v.reset", true);
         component.set("v.step", 1);
+        component.set("v.pictureSrc", "https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png");
         helper.onInit(component, event, helper);
     },
 
@@ -190,4 +192,20 @@
         });
         searchEvent.fire();
     },
+
+onDragOver: function(component, event) {
+        event.preventDefault();
+    },
+
+    onDrop: function(component, event, helper) {
+        component.set("v.disabledAddButton", true);
+		event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        var files = event.dataTransfer.files;
+        if (files.length>1) {
+            return alert("You can only upload one profile picture");
+        }
+        helper.readFile(component, helper, files[0]);
+	}
 })

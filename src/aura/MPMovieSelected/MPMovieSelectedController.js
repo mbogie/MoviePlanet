@@ -1,12 +1,12 @@
 ({
     MPSelectedMovieEvent: function (component, event, handler) {
-                        component.set("v.Spinner", true);
-
+        component.set("v.Spinner", true);
         component.set("v.selectedTabId", "one");
         component.set("v.movie", "{}");
         let movieId = event.getParam("movieId");
         let display = event.getParam('display');
         component.set("v.displayedSection", display);
+        console.log('detail movie id ' + movieId)
         let action = component.get("c.getMovieDetail");
         action.setParams({
             movieId: movieId
@@ -35,6 +35,20 @@
         $A.enqueueAction(getCast);
                        component.set("v.Spinner", false);
 
+    },
+
+    MPPassAverageReviews: function (component, event, handler) {
+        let count = event.getParam("count");
+        let sum = event.getParam("sum");
+        let average = sum/count;
+        console.log(sum + ' ' + count);
+        if(sum >0){
+        component.set("v.count", count);
+        component.set("v.sum", average.toFixed(2));
+        } else{
+           component.set("v.count", 0);
+           component.set("v.sum", 0);
+        }
     },
 
     MPHideMovieDetailEvent: function (component, event, handler) {
@@ -108,6 +122,7 @@
 
     addToFavorite: function (component, event, handler) {
         let movieId = component.get("v.movie").id;
+        let fbtype = component.get("v.movie").fbtype;
         let addToFB = component.get("c.addToBFList");
         addToFB.setParams({
             movieId: movieId,
@@ -115,7 +130,12 @@
         });
         addToFB.setCallback(this, function (response) {
             if (component.isValid() && response.getState() === 'SUCCESS') {
-                component.set("v.movie", response.getReturnValue());
+                if(fbtype == 'Favorite'){
+                      component.set("v.movie.fbtype", null);
+
+                }else{
+                component.set("v.movie.fbtype", 'Favorite');
+                }
                 console.log(response.getReturnValue());
             } else {
                 //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
@@ -126,6 +146,7 @@
 
     addToBlacklist: function (component, event, handler) {
         let movieId = component.get("v.movie").id;
+                let fbtype = component.get("v.movie").fbtype;
         let addToFB = component.get("c.addToBFList");
         addToFB.setParams({
             movieId: movieId,
@@ -133,8 +154,12 @@
         });
         addToFB.setCallback(this, function (response) {
             if (component.isValid() && response.getState() === 'SUCCESS') {
-                component.set("v.movie", response.getReturnValue());
-                console.log(response.getReturnValue());
+            if(fbtype == 'Black List'){
+                      component.set("v.movie.fbtype", null);
+
+                }else{
+                component.set("v.movie.fbtype", 'Black List');
+                }                console.log(response.getReturnValue());
             } else {
                 //  component.find("toastCmp").showToastModel(response.getError()[0].message, "error");
             }

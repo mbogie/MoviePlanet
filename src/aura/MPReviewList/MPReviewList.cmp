@@ -6,7 +6,9 @@
     <aura:handler name="init" action="{!c.MPShowReviews}" value="{!this}"/>
     <aura:handler event="c:MPGetReviewsEvent" action="{!c.MPGetReviewsEvent}"/>
     <aura:handler event="c:MPShowReviews" action="{!c.MPShowReviews}"/>
-<!--    <aura:handler name="change" value="{!v.id}" action="{!c.MPShowReviews}"/>-->
+    <aura:registerEvent name="passCount" type="c:MPPassAverageReviews"/>
+
+    <!--    <aura:handler name="change" value="{!v.id}" action="{!c.MPShowReviews}"/>-->
 
     <aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>
     <ui:scrollerWrapper class="scrollerSize">
