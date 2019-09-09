@@ -39,7 +39,7 @@
                     <img src="{!empty(v.actor.profile_path) ? $Resource.MP_Default :'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + v.actor.profile_path}"/>
                 </lightning:layoutItem>
                 <lightning:layoutItem class="details" alignmentBump="left">
-                    <p style="font-size:20px">Reviews Count: {!v.sum} ({!v.count})</p><br/>
+                    <p style="font-size:20px">Rating: {!v.sum} ({!v.count})</p><br/>
                     <p>Birthday: {!v.actor.birthday}</p>
                     <p>Deathday: {!v.actor.deathday}</p>
                     <p>Place of birth: {!v.actor.place_of_birth}</p>

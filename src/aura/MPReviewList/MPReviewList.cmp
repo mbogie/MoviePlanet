@@ -41,7 +41,7 @@
                         </header>
                         <div class="slds-post__content slds-text-longform">
                             <div>
-                                <ui:outputText value="{!boatReview.Name}" />
+                                <ui:outputText value="{!boatReview.Title__c}" />
                             </div>
                             <div>
                                 <ui:outputRichText class="slds-text-longform"  value="{!boatReview.Comment__c}" />

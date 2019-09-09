@@ -90,12 +90,11 @@
         let sum = event.getParam("sum");
         let average = sum/count;
         console.log(sum + ' ' + count);
-        if(sum >0){
         component.set("v.count", count);
-        component.set("v.sum", average.toFixed(2));
-        } else{
-           component.set("v.count", 0);
-           component.set("v.sum", 0);
-        }
+                if(sum >0){
+                component.set("v.sum", average.toFixed(2));
+                } else{
+                   component.set("v.sum", 0);
+                }
     },
 })

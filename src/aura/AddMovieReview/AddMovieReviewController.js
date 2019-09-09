@@ -25,7 +25,7 @@
                     {
                         resultsToast.setParams({
                             "title": "Saved",
-                            "message": "Boat Review Created"
+                            "message": "Review Created"
                         });
                         resultsToast.fire();
                     }
@@ -54,6 +54,10 @@
                         });
                         showReviews.fire();
                 helper.onInit(component,event,helper);
+                component.set("v.boatReview.Rating__c", 0);
+                component.set("v.rating", false);
+                component.set("v.rating", true);
+
             });
     	},
         onRecordUpdated: function(component, event, helper) {

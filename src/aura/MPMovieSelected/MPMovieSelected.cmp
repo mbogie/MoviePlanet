@@ -57,7 +57,7 @@
                     </aura:set>
                 </aura:if>
                 <lightning:layoutItem class="details" alignmentBump="left">
-                    <p style="font-size:20px">Reviews Count: {!v.sum} ({!v.count})</p><br/>
+                    <p style="font-size:20px">Rating: {!v.sum} ({!v.count})</p><br/>
                     <a href="{!v.movie.homepage}" target="_blank">{!v.movie.homepage}</a><br/>
                     <p>Release Date : {!v.movie.release_date}</p>
                     <p>Budget:

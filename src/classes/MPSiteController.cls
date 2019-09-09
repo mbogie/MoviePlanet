@@ -71,13 +71,21 @@ public with sharing class MPSiteController {
     }
     @AuraEnabled
     public static List<MPMovieImagesWrapper.Backdrops> getMovieImages(String movieId) {
-        List<MPMovieImagesWrapper.Backdrops> images = MPRestController.getMovieImages(movieId);
-        return images;
+        try {
+            List<MPMovieImagesWrapper.Backdrops> images = MPRestController.getMovieImages(movieId);
+            return images;
+        } catch(Exception e){
+            return new List<MPMovieImagesWrapper.Backdrops>();
+        }
     }
     @AuraEnabled
     public static List<MPMovieVideosWrapper.Trailer> getMovieTrailers(String movieId) {
-        List<MPMovieVideosWrapper.Trailer> trailers = MPRestController.getMovieVideos(movieId);
-        return trailers;
+        try {
+            List<MPMovieVideosWrapper.Trailer> trailers = MPRestController.getMovieVideos(movieId);
+            return trailers;
+        } catch(Exception e){
+            return new List<MPMovieVideosWrapper.Trailer>();
+        }
     }
 
 //public static String actorId = '3894';
@@ -164,7 +172,7 @@ public with sharing class MPSiteController {
 
     @AuraEnabled
     public static List<Review__c> getReviews(String objectId, String context) {
-        List<Review__c> reviews = [SELECT Id, Name, Comment__c, Rating__c, LastModifiedDate, CreatedDate,CreatedBy.Name,CreatedBy.SmallPhotoUrl FROM Review__c WHERE Id__c = :objectId AND Type__c LIKE :context];
+        List<Review__c> reviews = [SELECT Id, Name, Title__c, Comment__c, Rating__c, LastModifiedDate, CreatedDate,CreatedBy.Name,CreatedBy.SmallPhotoUrl FROM Review__c WHERE Id__c = :objectId AND Type__c LIKE :context ORDER BY CreatedDate DESC ];
         return reviews;
     }
 

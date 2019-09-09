@@ -1,23 +1,26 @@
-<aura:component description="AddMovieReview" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<aura:component description="AddMovieReview"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
 
-<aura:attribute name="context" type="String"/>
+    <aura:attribute name="context" type="String"/>
     <aura:attribute name="id" type="String"/>
-    <aura:attribute name="boatReview" type="Review__c"/>
+    <aura:attribute name="boatReview" type="Review__c" default="{}"/>
+    <aura:attribute name="rating" type="Boolean" default="true"/>
     <aura:attribute access="private" name="recordError" type="String"/>
-    <aura:registerEvent name="MPReviewAdded" type="c:MPReviewAdded" />
+    <aura:registerEvent name="MPReviewAdded" type="c:MPReviewAdded"/>
     <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
     <aura:registerEvent name="showReview" type="c:MPShowReviews"/>
 
     <!--<aura:dependency resource="markup://force:showToast" type="EVENT"/>-->
     <force:recordData aura:id="service"
-                      fields="Name, Comment__c, Rating__c, Id__c, Type__c"
+                      fields="Name, Title__c, Comment__c, Rating__c, Id__c, Type__c"
                       targetError="{!v.recordError}"
                       targetFields="{!v.boatReview}"
                       recordUpdated="{!c.onRecordUpdated}"
     />
     <lightning:layout multipleRows="true">
         <lightning:layoutItem size="12" padding="around-small">
-            <lightning:input name="title" label="Title" value="{!v.boatReview.Name}"/>
+            <lightning:input name="title" label="Title" value="{!v.boatReview.Title__c}"/>
         </lightning:layoutItem>
 
         <lightning:layoutItem size="12" padding="around-small">
@@ -28,7 +31,9 @@
             <label class="slds-form-element__label" for="input-id-01">Rating</label>
             <ul class="slds-post__footer-actions-list slds-list_horizontal">
                 <li class="slds-col slds-item slds-m-right_medium">
-                    <c:FiveStarRating value="{!v.boatReview.Rating__c}" />
+                    <aura:if isTrue="{!v.rating}">
+                        <c:FiveStarRating value="{!v.boatReview.Rating__c}"/>
+                    </aura:if>
                 </li>
             </ul>
         </lightning:layoutItem>
